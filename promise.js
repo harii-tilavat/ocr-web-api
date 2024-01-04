@@ -9,10 +9,15 @@ const getText = (path) => {
             }
         })
     })
-    // fs.readFile(path,)
+    
 }
-getText('./files/loop.txt').then((response) => {
-    console.log(response);
-}).catch((err) => {
-    console.log(err);
-});
+// getText('./files/loop.txt').then((response) => {
+//     console.log(response);
+// }).catch((err) => {
+//     console.log(err);
+// });
+const start = async () => {
+    const first = await getText('./files/loop.txt');
+    console.log(first);
+}
+start();
