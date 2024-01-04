@@ -5,10 +5,7 @@ const names = require('./names');
 const functions = require('./utils');
 
 
-functions.sayHi(names.JOHN);
-functions.sayHi(names.PETER);
-functions.sayHi('Harit');
-
-const absolute = path.isAbsolute('hello', 'node');
-// console.log(absolute);
-console.log(startServer('hello'));
+// functions.sayHi(names.JOHN);
+// functions.sayHi(names.PETER);
+// functions.sayHi('Harit');
+// -------------------------------
