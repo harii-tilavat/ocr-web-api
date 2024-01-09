@@ -1,28 +1,24 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const cors = require('cors');
+const PORT = process.env.PORT || 8000;
+
 const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static('./public'));
+const upload = require('./services/multerService');
+const routes = require('./routes/routes');
 
-// app.get('/', (req, res) => {
-//     try {
-//         res.status(200).sendFile(path.resolve(__dirname, './index.html'));
-//     } catch (error) {
-//         res.send(`<pre> ${error}</pre>`);
-//     }
+app.use('/', routes);
+// app.get('/home', (req, res) => {
+// 	res.json({ msg: 'testing' });
 // })
-app.get('/test',(req,res)=>{
-    console.log("Test request");
-    res.send();
+app.post('/uploads', upload.single("file"), (req, res) => {
+	console.log("Post request!");
+	res.json({ success: true, msg: 'testing successfull' });
 })
 
-app.get('/about',(req,res)=>{
-    res.sendFile(path.resolve(__dirname, './index.html'));
-})
-app.all('*', (req, res) => {
-    res.send('Error');
-})
-app.listen(8000, () => {
-    console.log("Server running!");
+app.listen(PORT, () => {
+	console.log(`Server running on http://localhost:${PORT}`);
 })
