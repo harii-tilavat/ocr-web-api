@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('../db/mysql');
 const router = express.Router();
 const upload = require('../services/multerService');
-const OCRController = require('../controllers/ocr.controllers');
+const OCRController = require('../controllers/ocr.controller');
 const { v4 } = require('uuid');
 
 router.route('/users')
@@ -67,7 +67,7 @@ router.route('/users/:id')
 
 router.route('/data')
     .get(OCRController.getData);
-
+// ------------------------------- Employee ----------------------------
 router.route('/employees')
     .get((req, res) => {
         const query = 'SELECT * FROM employees';
@@ -85,13 +85,14 @@ router.route('/employees')
         const empId = v4();
         db.query(query, [empId, empName, empLocation, empPosition, empSalary], (err, result) => {
             if (!err) {
-                res.json({ success: true, msg: 'Employee added successfully!' });
+                res.json({ success: true, message: 'Employee added successfully!' });
             } else {
-                res.json({ success: false, error: err });
+                res.status(400).json({ success: false, error: err, message: err.message });
             }
         })
         // res.json({success:true,msg:'testing'});
     })
+
 router.route('/employees/:id')
     .delete((req, res) => {
         const { id } = req.params;
@@ -113,7 +114,11 @@ router.route('/employees/:id')
         const { empName, empLocation, empPosition, empSalary } = req.body;
         const query = 'UPDATE employees SET empName = ?, empLocation = ?, empPosition = ?, empSalary = ? WHERE empId = ? ';
         db.query(query, [empName, empLocation, empPosition, empSalary, id], (err, result) => {
-            
+            if (!err) {
+                res.json({ success: true, message: 'Employee updated successfully' });
+            } else {
+                res.status(404).json({ success: true, error: err });
+            }
         });
 
     })
