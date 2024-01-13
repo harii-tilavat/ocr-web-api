@@ -4,6 +4,7 @@ const router = express.Router();
 const upload = require('../services/multerService');
 const OCRController = require('../controllers/ocr.controller');
 const { v4 } = require('uuid');
+const EmployeeController = require('../controllers/employee.controller');
 
 router.route('/users')
     .get((req, res) => {
@@ -65,9 +66,10 @@ router.route('/users/:id')
         })
     })
 
-router.route('/data')
-    .get(OCRController.getData);
+// router.route('/data')
+//     .get(OCRController.getData);
 // ------------------------------- Employee ----------------------------
+
 router.route('/employees')
     .get((req, res) => {
         const query = 'SELECT * FROM employees';
@@ -90,7 +92,6 @@ router.route('/employees')
                 res.status(400).json({ success: false, error: err, message: err.message });
             }
         })
-        // res.json({success:true,msg:'testing'});
     })
 
 router.route('/employees/:id')
@@ -128,6 +129,9 @@ router.route('/uploads')
         console.log("Post request!");
         res.json({ success: true, msg: 'testing successfull' });
     })
+
+const employeeController = new EmployeeController();
+employeeController.register(router);
 
 module.exports = router;
 

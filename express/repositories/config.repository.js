@@ -1,3 +1,5 @@
+// ---------------------------- I created this for testing purpose --------------------------------
+
 const express = require('express');
 const mysql = require('../db/mysql');
 
