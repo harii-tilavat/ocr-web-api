@@ -9,7 +9,6 @@ class OCRController {
             res.json({ success: true, data: result.data.text });
         } catch (error) {
             console.error(error);
-            // res.json({ success: false, msg: error.message });
             res.status(404).json({ success: false, message: error.message });
         }
     }

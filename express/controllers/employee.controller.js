@@ -9,8 +9,9 @@ class HotelController {
                     const data = employeeBiz.getEmployeeList();
                     res.json({ data, message: 'Employee list' });
                 } catch (error) {
-                    res.json({ error, message:'Something went wrong!'});;
+                    res.json({ error, message: 'Something went wrong!' });
                 }
             })
     }
 }
+module.exports = HotelController;

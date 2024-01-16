@@ -2,11 +2,10 @@ const express = require('express');
 const mysql = require('../db/mysql');
 const router = express.Router();
 const upload = require('../services/multerService');
-const OCRController = require('../controllers/ocr.controller');
-const { v4 } = require('uuid');
+
 const EmployeeController = require('../controllers/employee.controller');
-const EmployeeRepo = require('../repositories/employee.repository');
-const EmployeeBiz = require('../biz/employee.biz');
+const employeeController = new EmployeeController();
+employeeController.register(router);
 
 router.route('/users')
     .get((req, res) => {
@@ -69,20 +68,12 @@ router.route('/users/:id')
         })
     })
 
-// router.route('/data')
-//     .get(OCRController.getData);
-// ------------------------------- Employee ----------------------------
+// ------------------------------- Register routes ----------------------------
 
-router.route('/employees')
-    .get(async (req, res) => {
-        try {
-            const employeeBiz = new EmployeeBiz();
-            const data = await employeeBiz.getEmployeeList();
-            res.send({ data, message: 'Employee list' });
-        } catch (error) {
-            res.status(400).json({ error: error });
-        }
-    })
+
+
+
+
 // .post((req, res) => {
 //     const { empName, empLocation, empPosition, empSalary } = req.body;
 //     const query = 'INSERT INTO employees (empId,empName,empLocation,empPosition,empSalary) VALUES (?, ?, ?, ?, ?)';
