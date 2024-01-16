@@ -1,13 +1,11 @@
 const mysql = require("../db/mysql");
 class EmployeeRepo {
-    getEmployeesRepo() {
+    getEmployeeListRepo() {
         return new Promise(async (resolve, reject) => {
             try {
                 const query = 'SELECT * FROM employees';
-                mysql.query(query, [], (err, result) => {
-                    resolve(result);
-                });
-
+                const data = await mysql.execute(query, []);
+                resolve(data);
             } catch (error) {
                 reject(error);
             }

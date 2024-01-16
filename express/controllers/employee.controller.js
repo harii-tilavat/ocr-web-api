@@ -1,25 +1,16 @@
-const EmployeeRepo = require("../repositories/employee.repository");
+const EmployeeBiz = require("../biz/employee.biz")
 
-
-class EmployeeController {
+class HotelController {
     register(app) {
-        app.route('/emp')
-            .get(async (req, res, next) => {
+        app.route('/employees')
+            .get(async (req, res) => {
                 try {
-                    const employeeRepo = new EmployeeRepo();
-                    const employees = await employeeRepo.getEmployeesRepo();
-                    res.send({ success: true, message: 'Data fetched', data: employees });
+                    const employeeBiz = new EmployeeBiz();
+                    const data = employeeBiz.getEmployeeList();
+                    res.json({ data, message: 'Employee list' });
                 } catch (error) {
-                    next(error);
-                }
-            })
-            .post(async (req, res, next) => {
-                try {
-
-                } catch (error) {
-
+                    res.json({ error, message:'Something went wrong!'});;
                 }
             })
     }
 }
-module.exports = EmployeeController;

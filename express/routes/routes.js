@@ -1,10 +1,12 @@
 const express = require('express');
-const db = require('../db/mysql');
+const mysql = require('../db/mysql');
 const router = express.Router();
 const upload = require('../services/multerService');
 const OCRController = require('../controllers/ocr.controller');
 const { v4 } = require('uuid');
 const EmployeeController = require('../controllers/employee.controller');
+const EmployeeRepo = require('../repositories/employee.repository');
+const EmployeeBiz = require('../biz/employee.biz');
 
 router.route('/users')
     .get((req, res) => {
@@ -42,6 +44,7 @@ router.route('/users/:id')
     .get((req, res) => {
         const query = 'SELECT * FROM users WHERE userId = ?';
         const { id } = req.params;
+
         db.query(query, [id], (err, result) => {
             if (!err) {
                 res.json({ success: true, data: result });
@@ -71,58 +74,59 @@ router.route('/users/:id')
 // ------------------------------- Employee ----------------------------
 
 router.route('/employees')
-    .get((req, res) => {
-        const query = 'SELECT * FROM employees';
-        db.query(query, [], (err, result) => {
-            if (!err) {
-                res.json({ success: true, data: result });
-            } else {
-                res.json({ success: false, error: err });
-            }
-        })
+    .get(async (req, res) => {
+        try {
+            const employeeBiz = new EmployeeBiz();
+            const data = await employeeBiz.getEmployeeList();
+            res.send({ data, message: 'Employee list' });
+        } catch (error) {
+            res.status(400).json({ error: error });
+        }
     })
-    .post((req, res) => {
-        const { empName, empLocation, empPosition, empSalary } = req.body;
-        const query = 'INSERT INTO employees (empId,empName,empLocation,empPosition,empSalary) VALUES (?, ?, ?, ?, ?)';
-        const empId = v4();
-        db.query(query, [empId, empName, empLocation, empPosition, empSalary], (err, result) => {
-            if (!err) {
-                res.json({ success: true, message: 'Employee added successfully!' });
-            } else {
-                res.status(400).json({ success: false, error: err, message: err.message });
-            }
-        })
-    })
+// .post((req, res) => {
+//     const { empName, empLocation, empPosition, empSalary } = req.body;
+//     const query = 'INSERT INTO employees (empId,empName,empLocation,empPosition,empSalary) VALUES (?, ?, ?, ?, ?)';
+//     const empId = v4();
+//     db.query(query, [empId, empName, empLocation, empPosition, empSalary], (err, result) => {
+//         if (!err) {
+//             res.json({ success: true, message: 'Employee added successfully!' });
+//         } else {
+//             res.status(400).json({ success: false, error: err, message: err.message });
+//         }
+//     })
+// })
 
-router.route('/employees/:id')
-    .delete((req, res) => {
-        const { id } = req.params;
-        const query = 'DELETE FROM employees WHERE empId = ? ';
-        db.query(query, [id], (err, result) => {
-            if (!err) {
-                if (result.affectedRows > 0) {
-                    res.json({ success: true, message: 'Employee deleted successfully!' });
-                } else {
-                    res.status(404).json({ success: false, message: 'ID is not available!' });
-                }
-            } else {
-                res.status(404).json({ success: false, message: err.message });
-            }
-        })
-    })
-    .put((req, res) => {
-        const { id } = req.params;
-        const { empName, empLocation, empPosition, empSalary } = req.body;
-        const query = 'UPDATE employees SET empName = ?, empLocation = ?, empPosition = ?, empSalary = ? WHERE empId = ? ';
-        db.query(query, [empName, empLocation, empPosition, empSalary, id], (err, result) => {
-            if (!err) {
-                res.json({ success: true, message: 'Employee updated successfully' });
-            } else {
-                res.status(404).json({ success: true, error: err });
-            }
-        });
+// router.route('/employees/:id')
+//     .delete((req, res) => {
+//         const { id } = req.params;
+//         const query = 'DELETE FROM employees WHERE empId = ? ';
+//         db.query(query, [id], (err, result) => {
+//             if (!err) {
+//                 if (result.affectedRows > 0) {
+//                     res.json({ success: true, message: 'Employee deleted successfully!' });
+//                 } else {
+//                     res.status(404).json({ success: false, message: 'ID is not available!' });
+//                 }
+//             } else {
+//                 res.status(404).json({ success: false, message: err.message });
+//             }
+//         })
+//     })
+//     .put((req, res) => {
+//         const { id } = req.params;
+//         const { empName, empLocation, empPosition, empSalary } = req.body;
+//         const query = 'UPDATE employees SET empName = ?, empLocation = ?, empPosition = ?, empSalary = ? WHERE empId = ? ';
+//         db.query(query, [empName, empLocation, empPosition, empSalary, id], (err, result) => {
+//             if (!err) {
+//                 res.json({ success: true, message: 'Employee updated successfully' });
+//             } else {
+//                 res.status(404).json({ success: true, error: err });
+//             }
+//         });
 
-    })
+//     })
+
+
 
 router.route('/uploads')
     .post(upload.single("file"), (req, res) => {
@@ -130,8 +134,8 @@ router.route('/uploads')
         res.json({ success: true, msg: 'testing successfull' });
     })
 
-const employeeController = new EmployeeController();
-employeeController.register(router);
+// const employeeController = new EmployeeController();
+// employeeController.register(router);
 
 module.exports = router;
 

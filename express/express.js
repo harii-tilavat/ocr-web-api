@@ -13,5 +13,5 @@ app.use(loggerMiddlewar);
 app.use('/', routes);
 
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:8000`);
+	console.log(`Server running on http://localhost:${PORT}`);
 })
