@@ -1,10 +1,11 @@
 class BaseException extends Error {
-    constructor(message, status = 500) {
-        if (!message) {
-            message = 'Oops!!! Something went wrong';
+    constructor(msg, status = 500) {
+        if (!msg) {
+            msg = 'Oops!!! Something went wrong';
         }
-        super(message);
+        super(msg);
         this.status = status;
+        this.message = msg;
     }
 }
 module.exports = BaseException;
