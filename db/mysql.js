@@ -20,7 +20,7 @@ module.exports = {
                 user: dbConfig.user,
                 password: dbConfig.password,
                 database: dbConfig.database,
-                timezone: 'UTC+5.30',
+                // timezone: 'UTC+5.30',
                 typeCast: (field, useDefaultTypeCasting) => {
                     try {
                         if (field.type === 'BIT' && field.length === 1) {
