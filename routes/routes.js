@@ -5,6 +5,8 @@ const upload = require('../services/multerService');
 const OCRController = require('../controllers/ocr.controller');
 const { v4 } = require('uuid');
 const EmployeeController = require('../controllers/employee.controller');
+const employeeController = new EmployeeController();
+employeeController.register(router);
 
 router.route('/users')
     .get((req, res) => {
@@ -66,33 +68,8 @@ router.route('/users/:id')
         })
     })
 
-// router.route('/data')
-//     .get(OCRController.getData);
-// ------------------------------- Employee ----------------------------
 
-// router.route('/employees')
-//     .get((req, res) => {
-//         const query = 'SELECT * FROM employees';
-//         db.query(query, [], (err, result) => {
-//             if (!err) {
-//                 res.json({ success: true, data: result });
-//             } else {
-//                 res.json({ success: false, error: err });
-//             }
-//         })
-//     })
-//     .post((req, res) => {
-//         const { empName, empLocation, empPosition, empSalary } = req.body;
-//         const query = 'INSERT INTO employees (empId,empName,empLocation,empPosition,empSalary) VALUES (?, ?, ?, ?, ?)';
-//         const empId = v4();
-//         db.query(query, [empId, empName, empLocation, empPosition, empSalary], (err, result) => {
-//             if (!err) {
-//                 res.json({ success: true, message: 'Employee added successfully!' });
-//             } else {
-//                 res.status(400).json({ success: false, error: err, message: err.message });
-//             }
-//         })
-//     })
+// ------------------------------- Employee ----------------------------
 
 // router.route('/employees/:id')
 //     .delete((req, res) => {
@@ -124,14 +101,13 @@ router.route('/users/:id')
 
 //     })
 
-router.route('/uploads')
-    .post(upload.single("file"), (req, res) => {
-        console.log("Post request!");
-        res.json({ success: true, msg: 'testing successfull' });
-    })
+// router.route('/uploads')
+//     .post(upload.single("file"), (req, res) => {
+//         console.log("Post request!");
+//         res.json({ success: true, msg: 'testing successfull' });
+//     })
 
-const employeeController = new EmployeeController();
-employeeController.register(router);
+
 
 module.exports = router;
 
