@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const loggerMiddlewar = require('./middleware/LoggerMiddleware');
+const { ErrorHandlingMiddleware, LoggerMiddleware } = require('./middleware');
 const PORT = process.env.PORT || 8000;
 const app = express();
 
@@ -9,9 +9,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const routes = require('./routes/routes');
-app.use(loggerMiddlewar);
+app.use(LoggerMiddleware);
+// app.use(ErrorHandlingMiddleware);
 app.use('/', routes);
 
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
+	console.log('-----------------------------------------------');
+	console.log(`Server running on http://localhost:${PORT} 😎`);
 })

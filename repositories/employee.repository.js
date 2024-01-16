@@ -53,7 +53,6 @@ class EmployeeRepo {
     deleteEmployeeRepo(id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const id = 'testing';
                 const query = 'DELETE FROM employees WHERE empId = ? ';
                 const data = await mysql.execute(query, [id]);
                 resolve(data);

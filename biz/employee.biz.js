@@ -53,7 +53,6 @@ class EmployeeBiz {
         return new Promise(async (resolve, reject) => {
             try {
                 // Calling updateEmployeeRepo
-                debugger;
                 const lookup = await this.EmloyeeRepo.updateEmployeeRepo(id, employee);
                 if (lookup) {
                     resolve(lookup);

@@ -51,8 +51,6 @@ class EmployeeController {
                     const employeeBiz = new EmployeeBiz();
                     const data = await employeeBiz.deleteEmployee(id);
                     res.json({ data, message: 'Deleted successfully! ' });
-                    // employeeBiz.EmloyeeRepo
-                    // Cal bizz
                 } catch (error) {
                     res.status(400).json({ error, message: 'Deleting error! ' });
                 }
