@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
 const { ErrorHandlingMiddleware, LoggerMiddleware } = require('./middleware');
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -9,6 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const routes = require('./routes/routes');
+const { veryfiClient } = require('./config/secret');
 app.use(LoggerMiddleware);
 // app.use(ErrorHandlingMiddleware);
 app.use('/', routes);
