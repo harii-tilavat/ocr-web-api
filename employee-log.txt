@@ -1,3 +1,5 @@
+ # This is logs generated autometic on API call
+
 [12/1/2024, 5:48:04 pm] GET /users 
 [12/1/2024, 5:48:04 pm] GET /employees 
 [12/1/2024, 5:48:08 pm] GET /users 
@@ -551,3 +553,36 @@
 [16/1/2024, 6:21:29 pm] GET /employees 
 [16/1/2024, 6:21:30 pm] GET /employees 
 [16/1/2024, 6:23:37 pm] GET /employees 
+[16/1/2024, 6:29:23 pm] GET /employees 
+[16/1/2024, 6:38:22 pm] GET /employees 
+[16/1/2024, 6:38:23 pm] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f 
+[16/1/2024, 6:40:01 pm] GET /employees 
+[17/1/2024, 11:23:08 am] GET /employees 
+[17/1/2024, 11:24:46 am] GET /employees 
+[17/1/2024, 11:28:42 am] GET / 
+[17/1/2024, 11:28:43 am] GET / 
+[17/1/2024, 11:28:49 am] GET /employees 
+[17/1/2024, 11:28:49 am] GET /favicon.ico 
+[17/1/2024, 11:28:58 am] GET /employees/e1 
+[17/1/2024, 11:30:19 am] GET /employees/e1 
+[17/1/2024, 11:30:30 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f 
+[17/1/2024, 11:31:10 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f%20'%20or%201=1 
+[17/1/2024, 11:31:48 am] GET /employees/'33bc6de9-c343-4a38-a96a-b93163ea2b5f%20'%20or%201=1 
+[17/1/2024, 11:35:01 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f 
+[17/1/2024, 11:35:07 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f 
+[17/1/2024, 11:35:12 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f 
+[17/1/2024, 11:43:26 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f%20''%20or%201=1 
+[17/1/2024, 11:46:31 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f%20or%201=1 
+[17/1/2024, 11:47:51 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f%20'or%201=1 
+[17/1/2024, 11:49:56 am] GET /employees 
+[17/1/2024, 11:50:02 am] GET /employees/33bc6de9-c343-4a38-a96a-b93163ea2b5f%20 
+[17/1/2024, 11:53:57 am] GET /employees 
+[17/1/2024, 11:57:50 am] GET /employees 
+[17/1/2024, 11:59:06 am] GET /employees 
+[17/1/2024, 12:06:48 pm] GET /employees 
+[17/1/2024, 12:08:20 pm] GET /employees 
+[17/1/2024, 12:08:24 pm] GET /employees 
+[17/1/2024, 12:09:06 pm] GET /employees 
+[17/1/2024, 12:09:26 pm] GET /employees 
+[17/1/2024, 12:25:06 pm] GET /employees 
+[17/1/2024, 2:03:33 pm] GET /employees 

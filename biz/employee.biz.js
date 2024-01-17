@@ -23,10 +23,10 @@ class EmployeeBiz {
             try {
                 const lookup = await this.EmloyeeRepo.getEmployeeRepo(id);
                 // resolve(lookup)
-                if (lookup) {
+                if (lookup.length) {
                     resolve(lookup);
                 } else {
-                    throw new BaseException('Testing message', 400);
+                    throw new BaseException('Employee not found!', 400);
                 }
             } catch (error) {
                 reject(error);
