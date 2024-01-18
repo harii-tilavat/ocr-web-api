@@ -19,7 +19,7 @@ class OCRController {
                     const data = await ocrBiz.uploadDocument(req.file);
                     res.json({ data, message: 'Document inserted!' });
                 } catch (error) {
-                    res.status(400).json({ error: error });
+                    res.status(400).json({ error: error, message: 'Document not inserted!' });
                 }
             })
         app.route('/docs/:id')
@@ -32,6 +32,17 @@ class OCRController {
                 } catch (error) {
                     res.json({ error, message: 'something went wrong' });
                 }
+            })
+            .delete(async (req, res) => {
+                try {
+                    const { id } = req.params;
+                    const ocrBiz = new OCRBiz();
+                    const data = await ocrBiz.deleteDocument(id);
+                    res.json({ data, message: 'Deleted successfully!' });
+                } catch (error) {
+                    res.status(400).json({ error, message: 'Deleting error! ' });
+                }
+
             })
     }
 }
