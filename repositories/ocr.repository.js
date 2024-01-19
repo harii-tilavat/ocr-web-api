@@ -45,7 +45,11 @@ class OCRRepo {
         return new Promise(async (resolve, reject) => {
             try {
                 const query = 'DELETE FROM documents WHERE doc_id = ? ';
-                const data = await mysql.execute(query, [id + 'testing']);
+                const data = await mysql.execute(query, [id]);
+                // Retrive file path
+                // const selectFileQuery = 'SELECT image_url FROM documents WHERE doc_id = ?';
+                // const filePath = await mysql.execute(selectFileQuery, [id]);
+                // resolve({ ...filePath[0], ...data });
                 resolve(data);
             } catch (error) {
                 reject(error);
