@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const ConfigRepo = require("../repositories/config.repo");
 const BaseException = require("../exceptions/base.exception");;
 const md5 = require("md5");
+const jwt = require('jsonwebtoken');
 
 class ConfigBiz {
     constructor() {
@@ -34,6 +35,16 @@ class ConfigBiz {
                 if (error && error.code == 'ER_DUP_ENTRY') {
                     reject(new BaseException('already username exists try different one!', 409));
                 }
+                reject(error);
+            }
+        })
+    }
+    jwtTokenEncoded(data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const token = jwt.sign({ ...data }, 'shh');
+                resolve(token);
+            } catch (error) {
                 reject(error);
             }
         })

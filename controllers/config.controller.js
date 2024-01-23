@@ -1,6 +1,5 @@
 const ConfigBiz = require("../biz/config.biz");
 const ConfigUserPostRequest = require("../models/configUserPostRequest");
-const ConfigRepo = require("../repositories/config.repo");
 
 class ConfigController {
     register(app) {
@@ -20,7 +19,8 @@ class ConfigController {
                     const body = new ConfigUserPostRequest(req.body);
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.registerUser(body);
-                    res.json({ data,message:'User detail' });
+                    const token = await configBiz.jwtTokenEncoded(data);
+                    res.json({ token, message: 'User registerd!' });
                 } catch (error) {
                     res.json({ error });
                 }

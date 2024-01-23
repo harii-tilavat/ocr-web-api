@@ -1302,3 +1302,15 @@
 [23/1/2024, 4:42:08 pm] POST /register 
 [23/1/2024, 4:45:49 pm] POST /register 
 [23/1/2024, 4:45:59 pm] GET /users 
+[23/1/2024, 5:02:09 pm] GET /users 
+[23/1/2024, 5:02:18 pm] GET /users 
+[23/1/2024, 5:02:26 pm] GET /users 
+[23/1/2024, 5:09:36 pm] GET /users 
+[23/1/2024, 5:09:44 pm] POST /register 
+[23/1/2024, 5:09:51 pm] POST /register 
+[23/1/2024, 5:10:19 pm] POST /register 
+[23/1/2024, 5:10:58 pm] POST /register 
+[23/1/2024, 5:11:39 pm] POST /register 
+[23/1/2024, 5:12:16 pm] POST /register 
+[23/1/2024, 5:16:10 pm] POST /register 
+[23/1/2024, 5:18:22 pm] POST /register 
