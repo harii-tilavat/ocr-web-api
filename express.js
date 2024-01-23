@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const routes = require('./routes/routes');
+const ConfigUserRequest = require('./models/config');
 app.use(LoggerMiddleware);
 app.use('/', routes);
 
