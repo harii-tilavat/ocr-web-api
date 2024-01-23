@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const OCRRepo = require('../repositories/ocr.repository');
 const BaseException = require('../exceptions/base.exception');
-const { existsSync } = require('fs');
 class OCRBiz {
     constructor() {
         this.ocrRepo = new OCRRepo();
@@ -13,7 +12,7 @@ class OCRBiz {
         return new Promise(async (resolve, reject) => {
             try {
                 const doc_id = uuidv4();
-                const { destination, filename } = file;
+                const { filename } = file;
                 const image_url = `/uploads/files/${filename}`;
                 const txtFileUrl = `uploads/text_files/${doc_id}.txt`;
                 const data = { doc_id, image_url, ...(await veryfiClient.process_document(file.path, [], true)) };
