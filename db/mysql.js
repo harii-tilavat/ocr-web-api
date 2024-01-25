@@ -3,7 +3,7 @@ const dbConfig = {
     host: 'localhost',
     user: 'root',
     password: 'proflex004',
-    database: 'office'
+    database: 'ocr_db'
 };
 
 // const config = require('config');
