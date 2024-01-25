@@ -1,3 +1,5 @@
-const LoggerMiddleware = require('./LoggerMiddleware');
-const ErrorHandlingMiddleware = require('./ErrorHandlingMiddleware');
-module.exports = { LoggerMiddleware, ErrorHandlingMiddleware };
+
+
+exports.requestMiddleware = require('../middleware/RequestMiddleware');
+exports.loggerMiddleware = require('./LoggerMiddleware');
+exports.errorHandlingMiddleware = require('./ErrorHandlingMiddleware');

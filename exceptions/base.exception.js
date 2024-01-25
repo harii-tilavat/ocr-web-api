@@ -5,8 +5,6 @@ class BaseException extends Error {
         }
         super(message);
         this.status = status;
-        this.message = message;
-        this.msg = message;
     }
 }
 module.exports = BaseException;

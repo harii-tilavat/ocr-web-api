@@ -16,7 +16,7 @@ class ConfigController {
                 }
             })
         app.route('/register')
-            .post(async (req, res) => {
+            .post(async (req, res, next) => {
                 try {
                     const body = new ConfigUserPostRequest(req.body);
                     const configBiz = new ConfigBiz();
@@ -24,11 +24,11 @@ class ConfigController {
                     const token = await configBiz.jwtTokenEncoded(data);
                     res.json({ token, message: 'User registerd!' });
                 } catch (error) {
-                    res.json({ error });
+                    next(error);
                 }
             })
         app.route('/login')
-            .post(async (req, res) => {
+            .post(async (req, res, next) => {
                 try {
                     const { username, password } = req.body;
                     if (!username || !password) {
@@ -39,7 +39,7 @@ class ConfigController {
                     const token = await configBiz.jwtTokenEncoded(user);
                     res.json({ token, message: 'Success!' });
                 } catch (error) {
-                    res.json({ error });
+                    next(error);
                 }
             })
 
