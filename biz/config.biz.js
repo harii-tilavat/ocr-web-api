@@ -3,7 +3,8 @@ const ConfigRepo = require("../repositories/config.repo");
 const BaseException = require("../exceptions/base.exception");;
 const md5 = require("md5");
 const jwt = require('jsonwebtoken');
-const ConfigUserRequest = require("../models/config");
+const fs = require('fs');
+const path = require("path");
 
 class ConfigBiz {
     constructor() {
@@ -60,9 +61,9 @@ class ConfigBiz {
     jwtTokenEncoded(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                const token = jwt.sign({ ...data }, 'shh');
-                const verify = jwt.verify(token, 'shh');
-                resolve({ verify, token });
+                const jwtSecretKey = fs.readFileSync(path.resolve('./jwtRSA256.key'), { encoding: 'utf8' });
+                const token = jwt.sign({ exp: Math.floor(Date.now()) + (1 * 60 * 60 * 1000), ...data }, jwtSecretKey);
+                resolve({ token });
             } catch (error) {
                 reject(error);
             }
