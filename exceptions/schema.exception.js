@@ -1,4 +1,4 @@
-const { BaseException } = require(".");
+const BaseException = require("./base.exception");
 
 class SchemaException extends BaseException {
     constructor(errors) {

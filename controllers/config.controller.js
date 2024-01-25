@@ -1,13 +1,12 @@
 const ConfigBiz = require("../biz/config.biz");
 const MissingParamException = require("../exceptions/missing-param.exception");
-const ConfigUserRequest = require("../models/config");
 const ConfigUserPostRequest = require("../models/configUserPostRequest");
 const { SchemaJsonValidator } = require("../validators");
 
 class ConfigController {
     register(app) {
         app.route('/users')
-            .get(async (req, res,next) => {
+            .get(async (req, res, next) => {
                 try {
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.getUserList();
@@ -41,6 +40,7 @@ class ConfigController {
                     const user = await configBiz.loginUser(username, password);
                     const token = await configBiz.jwtTokenEncoded(user);
                     res.json({ token, message: 'Success!' });
+
                 } catch (error) {
                     next(error);
                 }

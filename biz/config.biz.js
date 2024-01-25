@@ -61,7 +61,8 @@ class ConfigBiz {
         return new Promise(async (resolve, reject) => {
             try {
                 const token = jwt.sign({ ...data }, 'shh');
-                resolve(token);
+                const verify = jwt.verify(token, 'shh');
+                resolve({ verify, token });
             } catch (error) {
                 reject(error);
             }
