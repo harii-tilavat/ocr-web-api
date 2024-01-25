@@ -17,8 +17,7 @@ CREATE TABLE users(
     -- updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
 TRUNCATE TABLE users;
-INSERT INTO users (id, name, lastname, username, password)
-VALUES ('u1','Harit','Tilavat','harit@123','1234');
+-- INSERT INTO users (id, name, lastname, username, password)  VALUES ('u1','Harit','Tilavat','harit@123','1234');
 SELECT * FROM users;
 
 -- CREATING DOCUMENTS TABLE
@@ -41,9 +40,8 @@ ALTER TABLE documents
 MODIFY image_url VARCHAR(50) DEFAULT '/uploads/not-found.jpg';
 TRUNCATE TABLE documents;
 --  Inserting data
-INSERT INTO documents (doc_id,image_url,vendor_name,total,category,document_type,invoice_number,ocr_text)
-VALUES
-	('d1','/uploads/files/1705497205162dmart_invoice.png','vendor name',10000.00,'recepit','123456','category','Hello. This is some text! \n\nHow are you ?');
+INSERT INTO documents (doc_id,image_url,vendor_name,total,category,document_type,invoice_number,ocr_text) 
+VALUES ('d1','/uploads/files/1705497205162dmart_invoice.png','vendor name',10000.00,'recepit','123456','category','Hello. This is some text! \n\nHow are you ?');
 
 SELECT * FROM documents;
 

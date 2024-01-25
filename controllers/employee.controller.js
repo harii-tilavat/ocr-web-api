@@ -2,7 +2,7 @@ const EmployeeBiz = require("../biz/employee.biz")
 
 class EmployeeController {
     register(app) {
-        app.route('/employees')
+        app.route('/api/employees')
             .get(async (req, res, next) => {
                 try {
                     const employeeBiz = new EmployeeBiz();
@@ -23,7 +23,7 @@ class EmployeeController {
                 }
             })
 
-        app.route('/employees/:id')
+        app.route('/api/employees/:id')
             .get(async (req, res, next) => {
                 try {
                     const { id } = req.params;

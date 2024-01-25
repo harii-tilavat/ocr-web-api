@@ -7,13 +7,13 @@ const { SchemaJsonValidator } = require("../validators");
 class ConfigController {
     register(app) {
         app.route('/users')
-            .get(async (req, res) => {
+            .get(async (req, res,next) => {
                 try {
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.getUserList();
                     res.json({ message: 'User list!', total_user: data.length, data });
                 } catch (error) {
-                    res.json({ error, message: 'Users not found!' });
+                    next(error);
                 }
             })
         app.route('/register')
