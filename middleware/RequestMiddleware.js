@@ -9,15 +9,16 @@ module.exports = async (req, res, next) => {
             next();
         }
         if (!req.headers.authorization) {
-            // throw new AuthException();
-            next();
+            throw new AuthException();
         }
         const token = req.headers.authorization;
         const jwtSecret = fs.readFileSync(path.resolve('./jwtRSA256.key'), { encoding: 'utf-8' });
-        // jwt.verify(token, jwtSecret,(err,decoded)=>{
-        //     console.log("ERROR => ",err);
-        //     console.log("decoded => ",decoded);
-        // });
+        jwt.verify(token, jwtSecret,(err,decoded)=>{
+            if(err){
+                return next(err);
+            }
+            next();
+        });
 
     } catch (error) {
         next(error);
