@@ -2,6 +2,7 @@ const ConfigBiz = require("../biz/config.biz");
 const MissingParamException = require("../exceptions/missing-param.exception");
 const ConfigUserRequest = require("../models/config");
 const ConfigUserPostRequest = require("../models/configUserPostRequest");
+const { SchemaJsonValidator } = require("../validators");
 
 class ConfigController {
     register(app) {
@@ -19,6 +20,8 @@ class ConfigController {
             .post(async (req, res, next) => {
                 try {
                     const body = new ConfigUserPostRequest(req.body);
+                    const schema = new SchemaJsonValidator();
+                    await schema.createUser(req.body);
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.registerUser(body);
                     const token = await configBiz.jwtTokenEncoded(data);

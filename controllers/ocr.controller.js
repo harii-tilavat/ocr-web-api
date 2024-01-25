@@ -1,4 +1,5 @@
 const OCRBiz = require("../biz/ocr.biz");
+const { MissingParamException, SchemaException } = require("../exceptions");
 const BaseException = require("../exceptions/base.exception");
 const upload = require("../services/multerService");
 
@@ -14,11 +15,15 @@ class OCRController {
                     next(error);
                 }
             })
-            .post(upload.single('file'), async (req, res,next) => {
+            .post(upload.single('file'), async (req, res, next) => {
                 try {
                     const ocrBiz = new OCRBiz();
-                    const data = await ocrBiz.uploadDocument(req.file);
-                    res.json({ data, message: 'Document inserted!' });
+                    if (req && req.file) {
+                        const data = await ocrBiz.uploadDocument(req.file);
+                        res.json({ data, message: 'Document inserted!' });
+                    } else {
+                        throw new BaseException('File not found!', 404);
+                    }
                 } catch (error) {
                     next(error);
                 }
@@ -27,9 +32,12 @@ class OCRController {
             .get(async (req, res, next) => {
                 try {
                     const { id } = req.params;
+                    if (!id) {
+                        throw new MissingParamException('id');
+                    }
                     const ocrBiz = new OCRBiz();
                     const data = await ocrBiz.getDocument(id);
-                    res.json({ data, message: 'Document detail!' });
+                    res.json({ data, message: 'Document detail!', request: req.headers });
                 } catch (error) {
                     next(error);
                 }
@@ -37,6 +45,9 @@ class OCRController {
             .delete(async (req, res, next) => {
                 try {
                     const { id } = req.params;
+                    if (!id) {
+                        throw new MissingParamException('id');
+                    }
                     const ocrBiz = new OCRBiz();
                     const data = await ocrBiz.deleteDocument(id);
                     res.json({ data, message: 'Deleted successfully!' });
