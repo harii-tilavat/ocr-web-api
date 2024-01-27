@@ -63,8 +63,8 @@ class ConfigBiz {
             try {
                 const expiresHour = 1;
                 const jwtSecretKey = fs.readFileSync(path.resolve('./jwtRSA256.key'), { encoding: 'utf8' });
-                const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + (expiresHour * 60 * 60), ...data }, jwtSecretKey);
-                resolve({ token });
+                const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + ( 5), ...data }, jwtSecretKey);
+                resolve(token);
             } catch (error) {
                 reject(error);
             }

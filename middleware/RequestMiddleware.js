@@ -17,7 +17,6 @@ module.exports = async (req, res, next) => {
             if (err) {
                 return next(err);
             }
-            console.log("Decoded => ", decoded);
             next();
         });
 
