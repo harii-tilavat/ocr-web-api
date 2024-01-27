@@ -61,8 +61,9 @@ class ConfigBiz {
     jwtTokenEncoded(data) {
         return new Promise(async (resolve, reject) => {
             try {
+                const expiresHour = 1;
                 const jwtSecretKey = fs.readFileSync(path.resolve('./jwtRSA256.key'), { encoding: 'utf8' });
-                const token = jwt.sign({ exp: Math.floor(Date.now()) + (1 * 60 * 60 * 1000), ...data }, jwtSecretKey);
+                const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + (expiresHour * 60 * 60), ...data }, jwtSecretKey);
                 resolve({ token });
             } catch (error) {
                 reject(error);
