@@ -1,19 +1,22 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs');
-const { LoggerMiddleware } = require('./middleware');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
+const { loggerMiddleware, requestMiddleware, errorHandlingMiddleware, responseMiddleware } = require('./middleware');
 const PORT = process.env.PORT || 8000;
 const app = express();
-app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
+app.use(loggerMiddleware);
 
-const routes = require('./routes/routes');
-const ConfigUserRequest = require('./models/config');
-app.use(LoggerMiddleware);
-app.use('/', routes);
+app.use(requestMiddleware);
+// app.use(responseMiddleware);
+app.use('/', require('./routes/routes'));
+app.use(errorHandlingMiddleware);
 
 app.listen(PORT, () => {
 	console.log('-----------------------------------------------');

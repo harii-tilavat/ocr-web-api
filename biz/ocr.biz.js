@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const OCRRepo = require('../repositories/ocr.repository');
 const BaseException = require('../exceptions/base.exception');
+
 class OCRBiz {
     constructor() {
         this.ocrRepo = new OCRRepo();
@@ -51,9 +52,10 @@ class OCRBiz {
                 let documentObj = {};
                 if (lookup && lookup.length > 0) {
                     documentObj = lookup[0];
+                    resolve(documentObj);
+                } else {
+                    throw new BaseException('Id not found!',404);
                 }
-                resolve(documentObj);
-
             } catch (error) {
                 reject(error);
             }
@@ -65,11 +67,12 @@ class OCRBiz {
                 // const filePath = '/uploads/files/1705573230745dmart_invoice.png'.replace('/', '');
                 // fs.existsSync(path.join(lookup.image_url.replace('/', ''))) Logic of filepath getting
                 // fs.unlinkSync(filePath);
+
                 const lookup = await this.ocrRepo.deleteDocumentRepo(id);
                 if (lookup && lookup.affectedRows > 0) {
                     resolve(lookup);
                 } else {
-                    throw new BaseException('Id not found!');
+                    throw new BaseException('Id not found!', 404);
                 }
             } catch (error) {
                 reject(error);

@@ -1,0 +1,50 @@
+ongu
+INVOICE
+ree					олб
+	n
+
+Invoice No. 123456789				Contact
+Invoice Issue Date. 9 Jan 2021
+	Address :
+Final Payment Date : 12 January 2021
+	Ofiice Location, state, Country
+	Email :
+Invoice To,				mycompay@demo.com
+	Mobile :
+Full Name
+	+123 456 789 001
+Designation					Web:
+Company Name				www.company.com
+	ree
+Mob: 123 456 789
+Eamil: Demo@demo.com
+Web: www.comp.com			Amount Due: $ 1000.00
+
+Item Details	Price	Quantity	Amount
+
+Photoshop		$ 1000.00	01	$ 1000.00
+
+Illustrator		$ 1000.00	01	$ 1000.00
+
+Indesign		$ 1000.00	01	$ 1000.00
+
+Others		1000.00	01	$ 1000.00
+	Sub Totals	$ 4000.00
+Payment Details
+	5% Vat Amt.	$ 0000.00
+Email: youremail@demo.com
+Dabit Card, Credit Card, payment card		10% Tax	$ 0000.00
+Bank Account: 123654789
+	Graund Totals	$ 4000.00
+	png
+Trem & Condition
+	Director or Owner
+Lorem ipsum dolor sit amet, consectetur
+adipiscing elit, sed do eiusmod tempor			Lorem Ipsum
+incididunt ut labore et dolore magna			Signature
+	Full Name Here
+1600	pngtr
+pngtre-
+	pngtree
+
+pngte,

@@ -1,6 +1,30 @@
 const mysql = require("../db/mysql");
-const UserListModel =  require('../models/UserList');
+const UserListModel = require('../models/UserList');
 class ConfigRepo {
+    userLoginRepo(username, password) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+                const userObj = await mysql.execute(query, [username, password]);
+                const data = userObj.map(item => new UserListModel(item));
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    userSignupRepo(data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { id, name, lastname, username, password } = data;
+                const query = 'INSERT INTO users (id, name, lastname, username, password) VALUES (?, ?, ?, ?, ?)';
+                await mysql.execute(query, [id, name, lastname, username, password]);
+                resolve(true);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     getUserListRepo() {
         return new Promise(async (resolve, reject) => {
             try {
@@ -13,5 +37,6 @@ class ConfigRepo {
             }
         })
     }
+
 }
 module.exports = ConfigRepo;
