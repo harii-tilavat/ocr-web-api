@@ -5,7 +5,7 @@ const path = require("path");
 
 module.exports = async (req, res, next) => {
     try {
-        if (req.originalUrl.includes('/login') || req.originalUrl.includes('/register')) {
+        if (req.originalUrl.includes('/login') || req.originalUrl.includes('/register') || req.originalUrl.includes('/download')) {
             return next();
         }
         if (!req.headers.authorization) {
