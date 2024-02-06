@@ -43,5 +43,5 @@ TRUNCATE TABLE documents;
 INSERT INTO documents (doc_id,image_url,vendor_name,total,category,document_type,invoice_number,ocr_text) 
 VALUES ('d1','/uploads/files/1705497205162dmart_invoice.png','vendor name',10000.00,'recepit','123456','category','Hello. This is some text! \n\nHow are you ?');
 
-SELECT * FROM documents;
+SELECT * FROM documents order by created_at DESC;
 

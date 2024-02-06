@@ -22,7 +22,7 @@ class OCRRepo {
     getDocumentListRepo() {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM documents';
+                const query = 'SELECT * FROM documents order by created_at DESC';
                 const data = await mysql.execute(query, []);
                 resolve(data);
             } catch (error) {
