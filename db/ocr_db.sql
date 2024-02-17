@@ -24,23 +24,25 @@ SELECT * FROM users;
 
 DROP TABLE IF EXISTS documents;
 CREATE TABLE documents(
-	doc_id VARCHAR(500) NOT NULL PRIMARY KEY,
+	id VARCHAR(500) NOT NULL PRIMARY KEY,
     image_url VARCHAR(500),
-	vendor_name VARCHAR(500),
-    total DECIMAL(20,2),
-    category VARCHAR(500),
+    file_size VARCHAR(50),
+    file_type VARCHAR(50),
+    file_name VARCHAR(50),
+	-- vendor_name VARCHAR(500),
+    -- total DECIMAL(20,2),
+    -- category VARCHAR(500),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    document_type VARCHAR(500),
-    invoice_number VARCHAR(500),
+    -- document_type VARCHAR(500),
+    -- invoice_number VARCHAR(500),
     ocr_text TEXT
 );
 
-ALTER TABLE documents 
-MODIFY image_url VARCHAR(50) DEFAULT '/uploads/not-found.jpg';
+
 TRUNCATE TABLE documents;
 --  Inserting data
-INSERT INTO documents (doc_id,image_url,vendor_name,total,category,document_type,invoice_number,ocr_text) 
+INSERT INTO documents (id,image_url,document_type,ocr_text) 
 VALUES ('d1','/uploads/files/1705497205162dmart_invoice.png','vendor name',10000.00,'recepit','123456','category','Hello. This is some text! \n\nHow are you ?');
 
 SELECT * FROM documents order by created_at DESC;
