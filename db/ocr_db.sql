@@ -39,11 +39,20 @@ CREATE TABLE documents(
     ocr_text TEXT
 );
 
-
 TRUNCATE TABLE documents;
 --  Inserting data
 INSERT INTO documents (id,image_url,document_type,ocr_text) 
 VALUES ('d1','/uploads/files/1705497205162dmart_invoice.png','vendor name',10000.00,'recepit','123456','category','Hello. This is some text! \n\nHow are you ?');
 
 SELECT * FROM documents order by created_at DESC;
+--  -------------------- Contact table ------------------
 
+CREATE TABLE contact(
+	id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name VARCHAR(500) NOT NULL,
+    surname VARCHAR(500),
+    email VARCHAR(500) NOT NULL,
+    subject VARCHAR(500) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

@@ -1,0 +1,45 @@
+Ted's
+	Date:
+	Estimate Number:
+	Estimate For:
+Small Business
+
+From									To
+
+Ted's Small Business						Sally Yessler
+1324 Alameda St							301 W Spring St
+Los Angeles, California						Los Angeles, California
+United States							United States
+90015								90015
+(213) 123-4567							(213) 567-1234
+
+Description			Unit Cost	Rate/Hr	Total
+Brand Logo					$2,000.00				$2,000.00
+Website Design					$3,450.00				$3,450.00
+Website Maintenance				$50.00/hr	30 hours	$1,500.00
+Item Name						$0.00		$0.00		$0.00
+
+Item Name						$0.00		$0.00		$0.00
+Item Name						$0.00		$0.00		$0.00
+
+Item Name						$0.00		$0.00		$0.00
+
+Item Name						$0.00		$0.00		$0.00
+Item Name						$0.00		$0.00		$0.00
+
+Notes
+
+Such a pleasure working with you on this. Excited
+to start on the next project!
+	Subtotal	$6,950.00
+
+	Discount	$0.00
+	Subtotal (discount)	$0.00
+
+	Tax rate	$0.00
+
+	Total tax	$0.00
+
+	Total estimate	$6,950.00
+
+Template courtesy of TrulySmall.com

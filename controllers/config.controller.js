@@ -1,7 +1,9 @@
 const ConfigBiz = require("../biz/config.biz");
 const MissingParamException = require("../exceptions/missing-param.exception");
 const ConfigUserPostRequest = require("../models/configUserPostRequest");
+const { OCRService } = require("../services/ocr.service");
 const { SchemaJsonValidator } = require("../validators");
+const nodemailer = require('nodemailer');
 
 class ConfigController {
     register(app) {
@@ -45,7 +47,39 @@ class ConfigController {
                     next(error);
                 }
             })
+        app.route('/otp')
+            .get(async (req, res, next) => {
+                try {
+                    const ocrService = new OCRService();
+                    const otp = ocrService.generateOtp();
+                    const transporter = nodemailer.createTransport({
+                        service: 'gmail',
+                        auth: {
+                            user: 'ocrweb441@gmail.com',
+                            pass: 'ocrweb@123'
+                        }
+                    })
+                    var mailOptions = {
+                        from: 'ocrweb441@gmail.com',
+                        to: 'jerryff81@gmail.com',
+                        subject: 'OTP Verification',
+                        text: `Your OTP for verification is: ${otp}`
+                    };
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log("ERRORRRRRR ==>>",error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                    // console.log("Trasport ==>> ", transporter);
+                    res.json({ otp, transporter });
+                } catch (error) {
+                    next(error);
+                }
+            })
 
     }
 }
 module.exports = ConfigController;
+
