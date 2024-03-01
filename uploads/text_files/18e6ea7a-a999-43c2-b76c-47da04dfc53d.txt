@@ -14,14 +14,12 @@ United States							United States
 (213) 123-4567							(213) 567-1234
 
 Description			Unit Cost	Rate/Hr	Total
-Brand Logo						$2,000.00				$2,000.00
+Brand Logo					$2,000.00				$2,000.00
 Website Design					$3,450.00				$3,450.00
 Website Maintenance				$50.00/hr	30 hours	$1,500.00
-
 Item Name						$0.00		$0.00		$0.00
 
 Item Name						$0.00		$0.00		$0.00
-
 Item Name						$0.00		$0.00		$0.00
 
 Item Name						$0.00		$0.00		$0.00

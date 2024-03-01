@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/uploads', express.static(path.resolve(__dirname, 'uploads')));
 app.use(loggerMiddleware);
 
-app.use(requestMiddleware);
+// app.use(requestMiddleware);
 // app.use(responseMiddleware);
 app.use('/', require('./routes/routes'));
 app.use(errorHandlingMiddleware);

@@ -5,38 +5,39 @@ IMS, University of Lucknow,
 Lucknow - 226021
 
 What is SQL?
-SQL stands for Structured Query Language. It is
+•	•	SQL stands for Structured Query Language. It is
 used for storing and managing data in Relational
 Database Management System (RDBMS).
-It is a standard language for Relational Database
+
+•	It is a standard language for Relational Database
 System. It enables a user to create, read, update
 and delete relational databases and tables.
-All the RDBMS like MySQL, Informix, Oracle, MS
+•	•	All the RDBMS like MySQL, Informix, Oracle, MS
 Access and SQL Server use SQL as their standard
 database language.
-SQL allows users to query the database in a
+•	•	SQL allows users to query the database in a
 number of ways, using English-like statements.
 
 What are the SQL?
 SQL follows the following rules:
-Structure query language is not case sensitive. Generally,
+•	•	Structure query language is not case sensitive. Generally,
 keywords of SQL are written in uppercase.
-Statements of SQL are dependent on text lines. We can
+•	•	Statements of SQL are dependent on text lines. We can
 use a single SQL statement on one or multiple text line.
-Using the SQL statements, you can perform most of the
+•	•	Using the SQL statements, you can perform most of the
 actions in a database.
-SQL depends on tuple relational calculus and relational
+•	•	SQL depends on tuple relational calculus and relational
 algebra.
 
 What is SQL Process?
-When an SQL command is executing for any RDBMS,
+•	•	When an SQL command is executing for any RDBMS,
 then the system figure out the best way to carry out
 the request and the SQL engine determines that how
 to interpret the task.
-In the process, various components are included.
+•	•	In the process, various components are included.
 These components can be optimization Engine, Query
 engine, Query dispatcher, classic, etc.
-All the non-SQL queries are handled by the classic
+•	•	All the non-SQL queries are handled by the classic
 query engine, but SQL query engine won't handle
 logical files.
 
@@ -54,17 +55,16 @@ Physical Database
 
 What is Advantages of SQL?
 High speed
-
-●	No coding needed
+No coding needed
 Well defined standards
 Portability
 Interactive language
 Multiple data view
 
 What is SQL Datatype?
-SQL Datatype is used to define the values that a
+•	SQL Datatype is used to define the values that a
 column can contain.
-Every column is required to have a name and data
+•	Every column is required to have a name and data
 type in the database table.
 
 SQL Datatype
@@ -73,16 +73,15 @@ Binary	Numeric	Extract Numeric	String	Date
 Datatype	Datatype	Datatype	Datatype	Datatype
 
 SQL Commands
-SQL commands are instructions. It is used to
+•	•	SQL commands are instructions. It is used to
 communicate with the database. It is also used to
 perform specific tasks, functions, and queries of data.
-
-SQL can perform various tasks like create a table, add
+•	•	SQL can perform various tasks like create a table, add
 data to tables, drop the table, modify the table, set
 permission for users.
 
 Types of SQL Commands
-There are five types of SQL commands: DDL, DML,
+•	There are five types of SQL commands: DDL, DML,
 DCL, TCL, and DQL.
 SOL Command
 
@@ -90,23 +89,25 @@ DDL	DML	DCL	TCL	DQL
 
 Create	Insert	Grant	Commit	Select
 
-Drop	Update	Revoke	Rollback
+Drop
+Update	Revoke	Rollback
 
 Alter	Delete	Save
 	point
 Truncate
 
 Data Definition Language (DDL)
-DDL changes the structure of the table like creating a
+•	•	DDL changes the structure of the table like creating a
 table, deleting a table, altering a table, etc.
-All the command of DDL are auto-committed that
+•	•	All the command of DDL are auto-committed that
 means it permanently save all the changes in the
 database.
-Here are some commands that come under DDL:
-> CREATE
-➤ ALTER
-DROP
-TRUNCATE
+•	•	Here are some commands that come under DDL:
+ CREATE
+ ALTER
+	DROP
+
+ TRUNCATE
 
 Data Definition Language (DDL)- CREATE
 CREATE It is used to create a new table in the database.
@@ -115,7 +116,7 @@ Syntax:
 REATE TABLE TABLE_NAME (COLUMN_NAME DATATYPES[,....]);
 
 Example:
-CREATE TABLE EMPLOYEE(Name VARCHAR2(20), Email VARCHA
+CREATE TABLE EMPLOYEE (Name VARCHAR2(20), Email VARCHA
 R2(100), DOB DATE);
 
 Data Definition Language (DDL)- Drop
@@ -123,7 +124,7 @@ Drop: It is used to delete both the structure and record
 stored in the table.
 
 Syntax:
-DROP TABLE ;
+DROP TABLE;
 
 Example:
 DROP TABLE EMPLOYEE;
@@ -135,14 +136,14 @@ attribute or probably to add a new attribute.
 
 Syntax:
 ALTER TABLE table_name ADD column_name COLUMN-definition;
-	-
-ALTER TABLE MODIFY (COLUMN DEFINITION....);
+ALTER TABLE MODIFY(COLUMN DEFINITION....);
 
 Example:
 ALTER TABLE STU_DETAILS ADD(ADDRESS VARCHAR2(20));
 ALTER TABLE STU_DETAILS MODIFY (NAME VARCHAR2(20));
 
 Data Definition Language (DDL)- TRUNCATE
+
 TRUNCATE: It is used to delete all the rows from the table and free
 the space containing the table.
 
@@ -153,13 +154,14 @@ Example:
 TRUNCATE TABLE EMPLOYEE;
 
 Data Manipulation Language
-DML commands are used to modify the database. It is
+•	•	DML commands are used to modify the database. It is
 responsible for all form of CHANGES in the database.
-The command of DML is not auto-committed that
+•	•	The command of DML is not auto-committed that
 means it can't permanently save all the changes in the
 database. They can be rollback.
 
 Here are some commands that come under DML:
-INSERT
+	INSERT
+
 ➤ UPDATE
-DELETE
+ DELETE

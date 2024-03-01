@@ -12,11 +12,11 @@ class OCRBiz {
     uploadDocument(file) {
         return new Promise(async (resolve, reject) => {
             try {
-                const doc_id = uuidv4();
+                const id = uuidv4();
                 const { filename } = file;
                 const image_url = `/uploads/files/${filename}`;
-                const txtFileUrl = `uploads/text_files/${doc_id}.txt`;
-                const data = { doc_id, image_url, ...(await veryfiClient.process_document(file.path, [], true)) };
+                const txtFileUrl = `uploads/text_files/${id}.txt`;
+                const data = { ...(await veryfiClient.process_document(file.path, [], true)), id, image_url, ...file, };
                 const lookup = await this.ocrRepo.uploadDocRepo(data);
                 let documentObj = {};
                 if (lookup && lookup.length > 0) {
@@ -54,7 +54,7 @@ class OCRBiz {
                     documentObj = lookup[0];
                     resolve(documentObj);
                 } else {
-                    throw new BaseException('Id not found!',404);
+                    throw new BaseException('Id not found!', 404);
                 }
             } catch (error) {
                 reject(error);

@@ -56,6 +56,17 @@ class OCRController {
                 }
 
             })
+        app.route('/download')
+            .get(async (req, res, next) => {
+                try {
+                    res.download('uploads/text_files/3ad89a3a-f255-4304-b72c-520efa5d5b2d.txt', (err) => {
+                        if (err) throw err;
+                        console.log("File download");
+                    })
+                } catch (error) {
+                    next(error);
+                }
+            })
     }
 }
 module.exports = OCRController
