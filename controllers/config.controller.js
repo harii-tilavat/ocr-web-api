@@ -1,8 +1,8 @@
-const ConfigBiz = require("../biz/config.biz");
-const MissingParamException = require("../exceptions/missing-param.exception");
-const ConfigUserPostRequest = require("../models/configUserPostRequest");
-const { OCRService } = require("../services/ocr.service");
-const { SchemaJsonValidator } = require("../validators");
+const ConfigBiz = require("./../biz/config.biz");
+const MissingParamException = require("./../exceptions/missing-param.exception");
+const ConfigUserPostRequest = require("./../models/ConfigUserPostRequest")
+const { OCRService } = require("./../services/ocr.service");
+const { SchemaJsonValidator } = require("./../validators");
 const nodemailer = require('nodemailer');
 
 class ConfigController {
