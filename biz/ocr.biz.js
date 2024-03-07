@@ -13,9 +13,10 @@ class OCRBiz {
         return new Promise(async (resolve, reject) => {
             try {
                 const id = uuidv4();
+                const textFileExt = '.txt';
                 const { filename } = file;
                 const image_url = `/uploads/files/${filename}`;
-                const txtFileUrl = `uploads/text_files/${id}.txt`;
+                const txtFileUrl = `uploads/text_files/${id}.${textFileExt}`;
                 const data = { ...(await veryfiClient.process_document(file.path, [], true)), id, image_url, ...file, };
                 const lookup = await this.ocrRepo.uploadDocRepo(data);
                 let documentObj = {};

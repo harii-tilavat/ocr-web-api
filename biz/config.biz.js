@@ -5,6 +5,7 @@ const md5 = require("md5");
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require("path");
+const OCRRepo = require("../repositories/ocr.repository");
 
 class ConfigBiz {
     constructor() {
@@ -27,8 +28,8 @@ class ConfigBiz {
     registerUser(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (!(data.name && data.lastname && data.username && data.password)) {
-                    throw new BaseException('Provide all fields please! ', 404);
+                if (!(data.name && data.username && data.email && data.password)) {
+                    throw new BaseException('Provide all required fields please! ', 404);
                 }
                 const id = uuidv4();
                 const password = md5(data.password);
@@ -36,7 +37,13 @@ class ConfigBiz {
                 const isRegister = await this.configRepo.userSignupRepo(userdata);
                 if (isRegister) {
                     const lookup = await this.configRepo.userLoginRepo(userdata.username, userdata.password);
-                    resolve(lookup[0]);
+                    const ocrRepo = new OCRRepo();
+                    const data = await ocrRepo.addCredits(id);
+                    if (data) {
+                        resolve(lookup[0]);
+                    } else {
+                        throw new BaseException('Something went wrong!', 409);
+                    }
                 } else {
                     throw new BaseException('already username exists try different one!', 409);
                 }
@@ -61,7 +68,7 @@ class ConfigBiz {
     jwtTokenEncoded(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                const expiresHour = 1;
+                const expiresHour = 240;
                 const jwtSecretKey = fs.readFileSync(path.resolve('./jwtRSA256.key'), { encoding: 'utf8' });
                 const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + (expiresHour * 60 * 60), ...data }, jwtSecretKey);
                 resolve(token);

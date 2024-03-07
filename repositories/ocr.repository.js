@@ -20,6 +20,17 @@ class OCRRepo {
             }
         });
     }
+    addCredits(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'INSERT INTO credits ( user_id ) VALUES (?)';
+                const data = await mysql.execute(query, [id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     getDocumentListRepo() {
         return new Promise(async (resolve, reject) => {
             try {
