@@ -26,6 +26,7 @@ class ConfigController {
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.registerUser(body);
                     const token = await configBiz.jwtTokenEncoded(data);
+                    
                     res.json({ token, message: 'User registerd!' });
                 } catch (error) {
                     next(error);

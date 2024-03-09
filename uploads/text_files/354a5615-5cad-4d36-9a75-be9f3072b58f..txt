@@ -1,0 +1,50 @@
+D*Mart		Avenue E-Commerce Limited		TAX INVOICE
+Avenue E-Commerce Ltd. Survey No. 6, Hissa No. 15, Barave Village Near Godrej Hill,	AAD00820H0008975
+Khadakpada, Kalyan West, Thane Maharashtra -421301
+
+ORDER NUMBER:	19881296	INVOICE DATE: 14/08/20	CUSTOMER NAME:	Mairaj Kaisar
+	MOBILE NUMBER:	7507099228
+ORDER DATE:	12/08/20
+	DELIVERY MODE:	HOME DELIVERY
+DELIVERY DATE:	14/08/20
+	Panvelkar Aqua Marine,
+	DELIVERY ADDRESS:
+DELIVERY TIME:	10:00 AM - 5:00 PM						Marino-104Landmark: Tulsa
+	GardenChikholi Badlapur
+PAYMENT MODE:	PRE-PAID
+	421501
+TOTAL ITEMS:	10	TOTAL QUANTITY:	16
+
+SR	TAX
+	RATE	VALUE
+HSN				ITEM(S) PURCHASED			QTY
+NO.	CATEGORY
+	(Rs.)	(Rs.)
+
+CRATE ID: 00009595951010581663
+
+1.	19054000	2	Britannia Tostea Pro Bake Rusk - 400gm				1.0	38.00	38.00
+
+2.	34013090	4	Colgate Max Fresh Peppermint Ice 300 Gm				1.0	109.00	109.00
+
+3.	09042211	2	Everest Tikhalal Chilly Pwdr-200gm					2.0	68.00	136.00
+
+4.	12040090	2	Premia Alsi 100gm						3.0	10.00	30.00
+
+5.	07139010	1	Turdal Latur - 1kg						1.0	112.00	112.00
+
+6.	34054000	4	Vim Dishwash Bar(3X200gm) 600 gm					1.0	35.00	35.00
+CRATE ID:	00009595951010581666
+
+7.	11010000	2	Fortune Chakki Fresh Atta- 10Kg					1.0	339.00	339.00
+CRATE ID: 00009595951010581668
+
+8.	11010000	2	Fortune Chakki Fresh Atta- 10Kg					1.0	339.00	339.00
+CRATE ID:	00009595951010581670
+
+9.	4059020	3	Aabad Desi Cow Ghee Pouch 1L					1.0	369.00	369.00
+
+10.	15149920	2	Dhara Kachighani (Mustrd) Oil - 1L					2.0	134.00	268.00
+
+=
+11.	15121910	2	Fortune Sunlite Ref Sunflower Oil - 11					2.0	111.00	222.00

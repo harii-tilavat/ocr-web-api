@@ -15,20 +15,20 @@ const configSchema = {
     userRegisterModel: {
         id: '/register',
         type: 'object',
-        required: ['name', 'lastname', 'username', 'password'],
+        required: ['name', 'username', 'email', 'password'],
         properties: {
             name: {
-                type: 'string'
-            },
-            lastname: {
                 type: 'string'
             },
             username: {
                 type: 'string'
             },
+            email: {
+                type: 'string'
+            },
             password: {
                 type: 'string'
-            }
+            },
         }
     }
 }
