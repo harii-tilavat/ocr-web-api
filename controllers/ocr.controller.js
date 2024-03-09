@@ -8,10 +8,16 @@ class OCRController {
         app.route('/api/docs')
             .get(async (req, res, next) => {
                 try {
-                    const { user_id } = req.query;
+                    const { user_id, query, isArchivedList } = req.query;
+                    let searchQuery = query || '';
                     const ocrBiz = new OCRBiz();
-                    const data = await ocrBiz.getDocumentList(user_id);
-                    res.json({ data, message: 'Document list' });
+                    if (isArchivedList === 'true') {
+                        const data = await ocrBiz.getArchiveDocsList(user_id, searchQuery);
+                        res.json({ data, message: 'Archive Document list' });
+                    } else {
+                        const data = await ocrBiz.getDocumentList(user_id, searchQuery);
+                        res.json({ data, message: 'Document list' });
+                    }
                 } catch (error) {
                     next(error);
                 }
@@ -39,7 +45,7 @@ class OCRController {
                         throw new MissingParamException('id');
                     }
                     const ocrBiz = new OCRBiz();
-                    const data = await ocrBiz.getDocument(id,user_id);
+                    const data = await ocrBiz.getDocument(id, user_id);
                     res.json({ data, message: 'Document detail!', request: req.headers });
                 } catch (error) {
                     next(error);
@@ -48,12 +54,19 @@ class OCRController {
             .delete(async (req, res, next) => {
                 try {
                     const { id } = req.params;
+                    const { user_id, isArchivedList } = req.query;
                     if (!id) {
                         throw new MissingParamException('id');
                     }
                     const ocrBiz = new OCRBiz();
-                    const data = await ocrBiz.deleteDocument(id);
-                    res.json({ data, message: 'Deleted successfully!' });
+                    if (isArchivedList === 'true') {
+                        const data = await ocrBiz.deleteDocument(id, user_id);
+                        res.json({ data, message: 'Deleted successfully!' });
+                    } else {
+                        const data = await ocrBiz.archiveDocument(id, user_id);
+                        res.json({ data, message: 'Moved to bin successfully!' });
+
+                    }
                 } catch (error) {
                     next(error);
                 }

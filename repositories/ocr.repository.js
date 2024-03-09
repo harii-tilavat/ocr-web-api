@@ -31,10 +31,31 @@ class OCRRepo {
             }
         })
     }
-    getDocumentListRepo(user_id) {
+    getDocumentListRepo(user_id, searchQuery) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM documents WHERE user_id = ? order by created_at DESC';
+                let search = searchQuery;
+                let query = `SELECT * FROM documents WHERE user_id = ? AND is_deleted = 0 AND is_archive = 0 `;
+                if (search) {
+                    query = query + `AND file_type LIKE '%${search}%'`;
+                }
+                query = query + 'order by created_at DESC';
+                const data = await mysql.execute(query, [user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    getArchiveDocsList(user_id,searchQuery) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let search = searchQuery;
+                let query = `SELECT * FROM documents WHERE user_id = ? AND is_deleted = 0 AND is_archive = 1 `;
+                if (search) {
+                    query = query + `AND file_type LIKE '%${search}%'`;
+                }
+                query = query + 'order by created_at DESC';
                 const data = await mysql.execute(query, [user_id]);
                 resolve(data);
             } catch (error) {
@@ -45,7 +66,7 @@ class OCRRepo {
     getDocumentRepo(id, user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM documents WHERE id = ? AND user_id = ? ';
+                const query = 'SELECT * FROM documents WHERE id = ? AND user_id = ? AND is_deleted = 0 AND is_archive = 0 ';
                 const data = await mysql.execute(query, [id, user_id]);
                 resolve(data);
             } catch (error) {
@@ -53,11 +74,24 @@ class OCRRepo {
             }
         })
     }
-    deleteDocumentRepo(id) {
+    archiveDocRepo(id, user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'DELETE FROM documents WHERE id = ? ';
-                const data = await mysql.execute(query, [id]);
+                // const query = 'DELETE FROM documents WHERE id = ? ';
+                const query = 'UPDATE documents SET is_archive = 1 WHERE id = ? AND user_id = ?';
+                const data = await mysql.execute(query, [id, user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    deleteDocumentRepo(id, user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // const query = 'DELETE FROM documents WHERE id = ? ';
+                const query = 'UPDATE documents SET is_deleted = 1 WHERE id = ? AND user_id = ?  ';
+                const data = await mysql.execute(query, [id, user_id]);
                 // Retrive file path
                 // const selectFileQuery = 'SELECT image_url FROM documents WHERE id = ?';
                 // const filePath = await mysql.execute(selectFileQuery, [id]);
