@@ -9,7 +9,7 @@ class OCRBiz {
     constructor() {
         this.ocrRepo = new OCRRepo();
     }
-    uploadDocument(file) {
+    uploadDocument(file,user_id) {
         return new Promise(async (resolve, reject) => {
             try {
                 const id = uuidv4();
@@ -18,7 +18,7 @@ class OCRBiz {
                 const image_url = `/uploads/files/${filename}`;
                 const txtFileUrl = `uploads/text_files/${id}.${textFileExt}`;
                 const data = { ...(await veryfiClient.process_document(file.path, [], true)), id, image_url, ...file, };
-                const lookup = await this.ocrRepo.uploadDocRepo(data);
+                const lookup = await this.ocrRepo.uploadDocRepo(data,user_id);
                 let documentObj = {};
                 if (lookup && lookup.length > 0) {
                     documentObj = lookup[0];
@@ -30,11 +30,10 @@ class OCRBiz {
             }
         })
     }
-    getDocumentList() {
+    getDocumentList(user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                // this.ocrRepo.
-                const lookup = await this.ocrRepo.getDocumentListRepo();
+                const lookup = await this.ocrRepo.getDocumentListRepo(user_id);
                 if (lookup) {
                     resolve(lookup);
                 } else {
@@ -46,10 +45,10 @@ class OCRBiz {
 
         })
     }
-    getDocument(id) {
+    getDocument(id,user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const lookup = await this.ocrRepo.getDocumentRepo(id);
+                const lookup = await this.ocrRepo.getDocumentRepo(id,user_id);
                 let documentObj = {};
                 if (lookup && lookup.length > 0) {
                     documentObj = lookup[0];

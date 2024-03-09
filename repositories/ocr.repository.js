@@ -1,16 +1,16 @@
 const mysql = require('../db/mysql');
 const BaseException = require('../exceptions/base.exception');
 class OCRRepo {
-    uploadDocRepo(document) {
+    uploadDocRepo(document, user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                // const { id, image_url, vendor, total, category, document_type, invoice_number, ocr_text } = document;
-                const { id, image_url, size, mimetype, originalname, ocr_text } = document;
-                const query = 'INSERT INTO documents (id, image_url, file_size, file_type, file_name, ocr_text) VALUES (?, ?, ?, ?, ?, ?) ';
-                const data = await mysql.execute(query, [id, image_url, size, mimetype, originalname, ocr_text]);
+                // const { id, image_url, vendor, total, category, document_type, invoice_number, ocr_text ,originalname} = document;
+                const { id, image_url, size, mimetype, filename, ocr_text } = document;
+                const query = 'INSERT INTO documents (id, user_id, image_url, file_size, file_type, file_name, ocr_text) VALUES (?, ?, ?, ?, ?, ?, ?) ';
+                const data = await mysql.execute(query, [id, user_id, image_url, size, mimetype, filename, ocr_text]);
                 if (data) {
-                    const selectQuery = 'SELECT * FROM documents WHERE id = ?';
-                    const document = await mysql.execute(selectQuery, [id]);
+                    const selectQuery = 'SELECT * FROM documents WHERE id = ? AND user_id = ?';
+                    const document = await mysql.execute(selectQuery, [id, user_id]);
                     resolve(document);
                 } else {
                     throw new BaseException('Data not inserted!');
@@ -31,22 +31,22 @@ class OCRRepo {
             }
         })
     }
-    getDocumentListRepo() {
+    getDocumentListRepo(user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM documents order by created_at DESC';
-                const data = await mysql.execute(query, []);
+                const query = 'SELECT * FROM documents WHERE user_id = ? order by created_at DESC';
+                const data = await mysql.execute(query, [user_id]);
                 resolve(data);
             } catch (error) {
                 reject(error);
             }
         });
     }
-    getDocumentRepo(id) {
+    getDocumentRepo(id, user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM documents WHERE id = ? ';
-                const data = await mysql.execute(query, [id]);
+                const query = 'SELECT * FROM documents WHERE id = ? AND user_id = ? ';
+                const data = await mysql.execute(query, [id, user_id]);
                 resolve(data);
             } catch (error) {
                 reject(error);
