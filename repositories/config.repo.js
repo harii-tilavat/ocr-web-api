@@ -16,7 +16,7 @@ class ConfigRepo {
     userSignupRepo(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                const { id, name, lastname, username, password,ref_code } = data;
+                const { id, name, lastname, username, password, ref_code } = data;
                 const query = 'INSERT INTO users (id, name, lastname, username, password, ref_code) VALUES (?, ?, ?, ?, ?, ?)';
                 await mysql.execute(query, [id, name, lastname, username, password, ref_code]);
                 resolve(true);
