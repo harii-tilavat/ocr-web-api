@@ -72,6 +72,20 @@ class OCRController {
                 }
 
             })
+            .patch(async (req, res, next) => {
+                try {
+                    const { id } = req.params;
+                    const { user_id } = req.query;
+                    if (!id) {
+                        throw new MissingParamException('id');
+                    }
+                    const ocrBiz = new OCRBiz();
+                    const data = await ocrBiz.restoreDocument(id, user_id);
+                    res.json({ data, message: 'Restore successfully!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
         app.route('/download')
             .get(async (req, res, next) => {
                 try {
@@ -87,6 +101,19 @@ class OCRController {
             .post(async (req, res, next) => {
                 try {
                     // Himanshu your code will here
+                    const data = req.body;
+                    console.log("Data => ", data);
+                } catch (error) {
+                    next(error);
+                }
+            })
+        app.route('/api/export/:id')
+            .get(async (req, res, next) => {
+                try {
+                    const { id } = req.params;
+                    const ocrBiz = new OCRBiz();
+                    const filepath = await ocrBiz.exportDocumentExcel(id);
+                    res.download(filepath);
                 } catch (error) {
                     next(error);
                 }
