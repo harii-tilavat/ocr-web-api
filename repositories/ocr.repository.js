@@ -47,7 +47,7 @@ class OCRRepo {
             }
         });
     }
-    getArchiveDocsList(user_id,searchQuery) {
+    getArchiveDocsList(user_id, searchQuery) {
         return new Promise(async (resolve, reject) => {
             try {
                 let search = searchQuery;
@@ -79,6 +79,18 @@ class OCRRepo {
             try {
                 // const query = 'DELETE FROM documents WHERE id = ? ';
                 const query = 'UPDATE documents SET is_archive = 1 WHERE id = ? AND user_id = ?';
+                const data = await mysql.execute(query, [id, user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    restoreDocRepo(id, user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // const query = 'DELETE FROM documents WHERE id = ? ';
+                const query = 'UPDATE documents SET is_archive = 0 WHERE id = ? AND user_id = ?';
                 const data = await mysql.execute(query, [id, user_id]);
                 resolve(data);
             } catch (error) {
