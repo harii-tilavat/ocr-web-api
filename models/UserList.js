@@ -6,6 +6,7 @@ class UserListModel {
         this.email = data.email;
         this.type = data.type;
         this.username = data.username;
+        this.ref_code = data.ref_code;
     }
 }
 module.exports = UserListModel;

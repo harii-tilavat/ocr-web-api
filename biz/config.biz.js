@@ -5,6 +5,7 @@ const md5 = require("md5");
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require("path");
+const { OCRService } = require("../services/ocr.service");
 const OCRRepo = require("../repositories/ocr.repository");
 
 class ConfigBiz {
@@ -31,9 +32,11 @@ class ConfigBiz {
                 if (!(data.name && data.username && data.email && data.password)) {
                     throw new BaseException('Provide all required fields please! ', 404);
                 }
+                const ocrService = new OCRService();
                 const id = uuidv4();
                 const password = md5(data.password);
-                const userdata = { ...data, id, password };
+                const ref_code = ocrService.generateReferralCode();
+                const userdata = { ...data, id, password,ref_code };
                 const isRegister = await this.configRepo.userSignupRepo(userdata);
                 if (isRegister) {
                     const lookup = await this.configRepo.userLoginRepo(userdata.username, userdata.password);

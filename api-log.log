@@ -4833,6 +4833,15 @@
 [9/3/2024, 8:46:29 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&query=png&isArchivedList=true 
 [9/3/2024, 8:46:31 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
 [9/3/2024, 8:46:31 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
+<<<<<<< HEAD
+<<<<<<< HEAD
+[3/12/2024, 12:02:56 AM] POST /register 
+[3/12/2024, 12:02:58 AM] POST /register 
+[3/12/2024, 12:05:12 AM] POST /register 
+[3/12/2024, 12:05:59 AM] GET /users 
+=======
+>>>>>>> b9efe40908d608bf1ee5355add7b8eeb3a4b02c0
+=======
 [11/3/2024, 10:15:08 am] POST /login 
 [11/3/2024, 10:17:03 am] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
 [11/3/2024, 10:17:04 am] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
@@ -5465,6 +5474,7 @@
 [12/3/2024, 7:12:01 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
 [12/3/2024, 7:12:52 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
 [12/3/2024, 7:12:52 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
+<<<<<<< HEAD
 [12/3/2024, 7:15:10 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=true 
 [12/3/2024, 7:15:11 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=true 
 [12/3/2024, 7:15:11 pm] GET /api/docs?user_id=f99193ea-371c-4a02-ae42-3a44824fee6a&isArchivedList=false 
@@ -5515,3 +5525,6 @@
 [13/3/2024, 9:52:59 am] GET /api/docs?user_id=017c4731-1ba5-4f41-b512-d5573d9c25db&isArchivedList=false 
 [13/3/2024, 9:52:59 am] GET /uploads/files/dmart_invoice.png 
 [13/3/2024, 9:52:59 am] GET /uploads/files/dmart_invoice.png 
+=======
+>>>>>>> 6aac91bf010599927df2777105b820f8fcd98091
+>>>>>>> b026eb7a663f968f28e50df9d6c8b90f2fc8b7ab
