@@ -74,7 +74,7 @@ class OCRBiz {
                 const lookup = await this.ocrRepo.getDocumentRepo(id, user_id);
                 let documentObj = {};
                 if (lookup && lookup.length > 0) {
-                    documentObj = lookup[0];
+                    documentObj = lookup.map(item => new FileListModel(item))[0];
                     resolve(documentObj);
                 } else {
                     throw new BaseException('Id not found!', 404);
@@ -149,7 +149,7 @@ class OCRBiz {
                 const ocrService = new OCRService();
                 const lookup = await this.getDocumentList(user_id);
                 const data = lookup.map(item => new FileListModel(item));
-                const fileUrlExcel = `uploads/excel_files/${user_id}.xls`;
+                const fileUrlExcel = path.resolve(`uploads/excel_files/${user_id}.xls`);
                 ocrService.convertJsonToExcel(fileUrlExcel, data);
                 resolve(fileUrlExcel);
             } catch (error) {

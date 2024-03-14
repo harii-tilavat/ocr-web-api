@@ -1,3 +1,4 @@
+const { Router } = require("express");
 const OCRBiz = require("../biz/ocr.biz");
 const { MissingParamException, SchemaException } = require("../exceptions");
 const BaseException = require("../exceptions/base.exception");
@@ -113,7 +114,8 @@ class OCRController {
                     const { id } = req.params;
                     const ocrBiz = new OCRBiz();
                     const filepath = await ocrBiz.exportDocumentExcel(id);
-                    res.download(filepath);
+                    res.sendFile(filepath);
+                    console.log("ERROR => downloading");
                 } catch (error) {
                     next(error);
                 }

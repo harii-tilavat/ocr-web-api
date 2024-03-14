@@ -20,17 +20,6 @@ class OCRRepo {
             }
         });
     }
-    addCredits(id) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const query = 'INSERT INTO credits ( user_id ) VALUES (?)';
-                const data = await mysql.execute(query, [id]);
-                resolve(data);
-            } catch (error) {
-                reject(error);
-            }
-        })
-    }
     getDocumentListRepo(user_id, searchQuery) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -108,6 +97,30 @@ class OCRRepo {
                 // const selectFileQuery = 'SELECT image_url FROM documents WHERE id = ?';
                 // const filePath = await mysql.execute(selectFileQuery, [id]);
                 // resolve({ ...filePath[0], ...data });
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    addCredits(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'INSERT INTO credits ( user_id ) VALUES (?)';
+                const data = await mysql.execute(query, [id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    updateCredit(ref_user_id,credit) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const checkRefQuery = 'SELECT id FROM users WHERE ref_code = ?';
+                const ref_uid = await mysql.execute(checkRefQuery, [ref_user_id])
+                const query = 'UPDATE credits  SET max_credits = max_credit + ? AND avail_credit = avail_credit +  ? WHERE user_id IN(?)';
+                const data = await mysql.execute(query, [credit, credit, ids]);
                 resolve(data);
             } catch (error) {
                 reject(error);

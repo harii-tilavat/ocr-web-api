@@ -32,16 +32,18 @@ class ConfigBiz {
                 if (!(data.name && data.username && data.email && data.password)) {
                     throw new BaseException('Provide all required fields please! ', 404);
                 }
+                const ocrRepo = new OCRRepo();
                 const ocrService = new OCRService();
                 const id = uuidv4();
                 const password = md5(data.password);
                 const ref_code = ocrService.generateReferralCode();
-                const userdata = { ...data, id, password,ref_code };
-                const isRegister = await this.configRepo.userSignupRepo(userdata);
+                const userdata = { ...data, id, password, ref_code };
+                
+                // const isRegister = await this.configRepo.userSignupRepo(userdata);
                 if (isRegister) {
                     const lookup = await this.configRepo.userLoginRepo(userdata.username, userdata.password);
-                    const ocrRepo = new OCRRepo();
                     const data = await ocrRepo.addCredits(id);
+
                     if (data) {
                         resolve(lookup[0]);
                     } else {
@@ -68,6 +70,20 @@ class ConfigBiz {
             }
         })
     }
+    // updateUser() {
+    //     return new Promise(async (resolve, reject) => {
+    //         try {
+    //             const lookup = await this.configRepo.userLoginRepo(uName, md5(pwd));
+    //             if (lookup && lookup.length > 0) {
+    //                 resolve(lookup[0]);
+    //             } else {
+    //                 throw new BaseException('Invalid user!', 401);
+    //             }
+    //         } catch (error) {
+    //             reject(error);
+    //         }
+    //     })
+    // }
     jwtTokenEncoded(data) {
         return new Promise(async (resolve, reject) => {
             try {
