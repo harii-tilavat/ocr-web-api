@@ -84,6 +84,23 @@ class OCRBiz {
             }
         })
     }
+    getCredits(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.ocrRepo.getCreditsRepo(user_id);
+                let creditObj = {};
+                if (lookup && lookup.length > 0) {
+                    const { available_credit, max_credit } = lookup[0]
+                    creditObj = { credits: { available_credit, max_credit } };
+                    resolve(creditObj);
+                } else {
+                    throw new BaseException('Id not found!', 404);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     deleteDocument(id, user_id) {
         return new Promise(async (resolve, reject) => {
             try {

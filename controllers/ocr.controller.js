@@ -108,6 +108,18 @@ class OCRController {
                     next(error);
                 }
             })
+        app.route('/api/credits')
+            .get(async (req, res, next) => {
+                try {
+                    const { user_id } = req.query;
+                    let uid = user_id || null;
+                    const ocrBiz = new OCRBiz();
+                    const data = await ocrBiz.getCredits(uid);
+                    res.json({ data, message: 'Your credits!', request: req.headers });
+                } catch (error) {
+                    next(error);
+                }
+            })
         app.route('/api/export/:id')
             .get(async (req, res, next) => {
                 try {

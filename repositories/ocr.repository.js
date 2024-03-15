@@ -63,6 +63,20 @@ class OCRRepo {
             }
         })
     }
+    getCreditsRepo(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let query = 'SELECT * FROM credits';
+                if (user_id) {
+                    query = query + ` WHERE user_id = ${user_id}`
+                }
+                const data = await mysql.execute(query, []);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     archiveDocRepo(id, user_id) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -114,7 +128,7 @@ class OCRRepo {
             }
         })
     }
-    updateCredit(ref_user_id,credit) {
+    updateCredit(ref_user_id, credit) {
         return new Promise(async (resolve, reject) => {
             try {
                 const checkRefQuery = 'SELECT id FROM users WHERE ref_code = ?';
