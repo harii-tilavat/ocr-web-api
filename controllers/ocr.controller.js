@@ -3,7 +3,11 @@ const OCRBiz = require("../biz/ocr.biz");
 const { MissingParamException, SchemaException } = require("../exceptions");
 const BaseException = require("../exceptions/base.exception");
 const upload = require("../services/multerService");
-
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const testupload = multer({ storage: storage });
+const pdfParse = require('pdf-parse');
+const officegen = require('officegen');
 class OCRController {
     register(app) {
         app.route('/api/docs')
@@ -128,6 +132,31 @@ class OCRController {
                     const filepath = await ocrBiz.exportDocumentExcel(id);
                     res.sendFile(filepath);
                     console.log("ERROR => downloading");
+                } catch (error) {
+                    next(error);
+                }
+            })
+        app.route('/pdf-to-word')
+            .post(testupload.single('file'), async (req, res, next) => {
+                try {
+                    let pdfBuffer = req.file.buffer;
+
+                    let dataBuffer = await pdfParse(pdfBuffer);
+
+                    let docx = officegen('docx');
+
+                    docx.on('error', function (err) {
+                        console.log(err);
+                    });
+
+                    docx.on('finalize', function (written) {
+                        console.log('Finish to create Word file.\nTotal bytes created: ' + written + '\n');
+                    });
+
+                    docx.createP().addText(dataBuffer.text);
+
+                    res.attachment('output.docx');
+                    docx.generate(res);
                 } catch (error) {
                     next(error);
                 }

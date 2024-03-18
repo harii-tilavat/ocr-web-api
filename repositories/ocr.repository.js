@@ -68,7 +68,7 @@ class OCRRepo {
             try {
                 let query = 'SELECT * FROM credits';
                 if (user_id) {
-                    query = query + ` WHERE user_id = ${user_id}`
+                    query = query + ` WHERE user_id = '${user_id}'`
                 }
                 const data = await mysql.execute(query, []);
                 resolve(data);
@@ -128,13 +128,13 @@ class OCRRepo {
             }
         })
     }
-    updateCredit(ref_user_id, credit) {
+    updateCredit(user_id, max_credit, credit) {
         return new Promise(async (resolve, reject) => {
             try {
-                const checkRefQuery = 'SELECT id FROM users WHERE ref_code = ?';
-                const ref_uid = await mysql.execute(checkRefQuery, [ref_user_id])
-                const query = 'UPDATE credits  SET max_credits = max_credit + ? AND avail_credit = avail_credit +  ? WHERE user_id IN(?)';
-                const data = await mysql.execute(query, [credit, credit, ids]);
+                // const checkRefQuery = 'SELECT id FROM users WHERE ref_code = ?';
+                // const ref_uid = await mysql.execute(checkRefQuery, [ref_user_id]);
+                const query = 'UPDATE credits  SET max_credit = max_credit + (?), avail_credit = avail_credit +  (?) WHERE user_id IN (?)'; // WHERE user_id IN(?)
+                const data = await mysql.execute(query, [max_credit, credit, [user_id]]);
                 resolve(data);
             } catch (error) {
                 reject(error);

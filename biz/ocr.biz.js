@@ -31,6 +31,7 @@ class OCRBiz {
                     ocrService.generateTextFile(fileUrlText, documentObj.ocr_text);
                     ocrService.convertTextToWord(fileUrlWord, documentObj.ocr_text);
                     ocrService.convertJsonToExcel(fileUrlExcel, documentObj);
+                    this.updateCredits(user_id, 0, -1);
                 }
                 resolve(documentObj);
             } catch (error) {
@@ -90,11 +91,25 @@ class OCRBiz {
                 const lookup = await this.ocrRepo.getCreditsRepo(user_id);
                 let creditObj = {};
                 if (lookup && lookup.length > 0) {
-                    const { available_credit, max_credit } = lookup[0]
-                    creditObj = { credits: { available_credit, max_credit } };
+                    const { avail_credit, max_credit } = lookup[0];
+                    creditObj = { avail_credit, max_credit };
                     resolve(creditObj);
                 } else {
                     throw new BaseException('Id not found!', 404);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    updateCredits(user_id,max_credit, credit) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.ocrRepo.updateCredit(user_id, max_credit,credit);
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException('Credit not updated!', 404);
                 }
             } catch (error) {
                 reject(error);
