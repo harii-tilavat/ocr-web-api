@@ -26,8 +26,19 @@ class ConfigController {
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.registerUser(body);
                     const token = await configBiz.jwtTokenEncoded(data);
-                    
                     res.json({ token, message: 'User registerd!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
+        app.route('/update-user/:id')
+            .put(async (req, res, next) => {
+                try {
+                    const userdata = req.body;
+                    const {id} = req.params;
+                    const configBiz = new ConfigBiz();
+                    const data = await configBiz.updateUser(id, userdata);
+                    res.json({ data, message: 'Your detail has been updated successfully!' });
                 } catch (error) {
                     next(error);
                 }
@@ -68,7 +79,7 @@ class ConfigController {
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log("ERRORRRRRR ==>>",error);
+                            console.log("ERRORRRRRR ==>>", error);
                         } else {
                             console.log('Email sent: ' + info.response);
                         }

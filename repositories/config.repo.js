@@ -17,9 +17,21 @@ class ConfigRepo {
         return new Promise(async (resolve, reject) => {
             try {
                 const { id, name, email, lastname, username, password, ref_code } = data;
-                const query = 'INSERT INTO users (id, name, email, lastname, username, password, ref_code) VALUES (?, ?, ?, ?, ?, ?)';
-                await mysql.execute(query, [id, name, lastname, username, password, ref_code]);
+                const query = 'INSERT INTO users (id, name, email, lastname, username, password, ref_code) VALUES (?, ?, ?, ?, ?, ?, ?)';
+                await mysql.execute(query, [id, name, email, lastname, username, password, ref_code]);
                 resolve(true);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    updateUserRepo(user_id,data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { name, lastname, number, country } = data;
+                const query = 'UPDATE users SET name = ?, lastname = ?, number = ?, country = ? WHERE id = ?';
+                const lookup = await mysql.execute(query, [name, lastname, number, country, user_id]);
+                resolve(lookup);
             } catch (error) {
                 reject(error);
             }

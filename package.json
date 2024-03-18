@@ -26,6 +26,8 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.7.0",
     "nodemailer": "^6.9.11",
+    "officegen": "^0.6.5",
+    "pdf-parse": "^1.1.1",
     "uuid": "^9.0.1"
   }
 }

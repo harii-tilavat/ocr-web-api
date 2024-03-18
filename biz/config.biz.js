@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require("path");
 const { OCRService } = require("../services/ocr.service");
 const OCRRepo = require("../repositories/ocr.repository");
+const OCRBiz = require("./ocr.biz");
 
 class ConfigBiz {
     constructor() {
@@ -38,13 +39,12 @@ class ConfigBiz {
                 const password = md5(data.password);
                 const ref_code = ocrService.generateReferralCode();
                 const userdata = { ...data, id, password, ref_code };
-                
-                // const isRegister = await this.configRepo.userSignupRepo(userdata);
+
+                const isRegister = await this.configRepo.userSignupRepo(userdata);
                 if (isRegister) {
                     const lookup = await this.configRepo.userLoginRepo(userdata.username, userdata.password);
-                    const data = await ocrRepo.addCredits(id);
-
-                    if (data) {
+                    const creditData = await ocrRepo.addCredits(id);
+                    if (creditData) {
                         resolve(lookup[0]);
                     } else {
                         throw new BaseException('Something went wrong!', 409);
@@ -56,6 +56,19 @@ class ConfigBiz {
                 if (error && error.code == 'ER_DUP_ENTRY') {
                     reject(new BaseException('already username exists try different one!', 409));
                 }
+                reject(error);
+            }
+        })
+    }
+    updateUser(user_id, data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const userdata = { ...data };
+                const lookup = await this.configRepo.updateUserRepo(user_id, userdata);
+                if (lookup) {
+                    resolve(lookup);
+                }
+            } catch (error) {
                 reject(error);
             }
         })
