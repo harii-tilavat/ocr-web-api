@@ -1,3 +1,4 @@
+const { Router } = require("express");
 const OCRBiz = require("../biz/ocr.biz");
 const { MissingParamException, SchemaException } = require("../exceptions");
 const BaseException = require("../exceptions/base.exception");
@@ -72,6 +73,20 @@ class OCRController {
                 }
 
             })
+            .patch(async (req, res, next) => {
+                try {
+                    const { id } = req.params;
+                    const { user_id } = req.query;
+                    if (!id) {
+                        throw new MissingParamException('id');
+                    }
+                    const ocrBiz = new OCRBiz();
+                    const data = await ocrBiz.restoreDocument(id, user_id);
+                    res.json({ data, message: 'Restore successfully!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
         app.route('/download')
             .get(async (req, res, next) => {
                 try {
@@ -87,6 +102,32 @@ class OCRController {
             .post(async (req, res, next) => {
                 try {
                     // Himanshu your code will here
+                    const data = req.body;
+                    console.log("Data => ", data);
+                } catch (error) {
+                    next(error);
+                }
+            })
+        app.route('/api/credits')
+            .get(async (req, res, next) => {
+                try {
+                    const { user_id } = req.query;
+                    let uid = user_id || null;
+                    const ocrBiz = new OCRBiz();
+                    const data = await ocrBiz.getCredits(uid);
+                    res.json({ data, message: 'Your credits!', request: req.headers });
+                } catch (error) {
+                    next(error);
+                }
+            })
+        app.route('/api/export/:id')
+            .get(async (req, res, next) => {
+                try {
+                    const { id } = req.params;
+                    const ocrBiz = new OCRBiz();
+                    const filepath = await ocrBiz.exportDocumentExcel(id);
+                    res.sendFile(filepath);
+                    console.log("ERROR => downloading");
                 } catch (error) {
                     next(error);
                 }
