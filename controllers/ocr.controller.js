@@ -51,7 +51,7 @@ class OCRController {
                     }
                     const ocrBiz = new OCRBiz();
                     const data = await ocrBiz.getDocument(id, user_id);
-                    res.json({ data, message: 'Document detail!', request: req.headers });
+                    res.json({ data, message: 'Document detail!' });
                 } catch (error) {
                     next(error);
                 }
@@ -119,7 +119,24 @@ class OCRController {
                     let uid = user_id || null;
                     const ocrBiz = new OCRBiz();
                     const data = await ocrBiz.getCredits(uid);
-                    res.json({ data, message: 'Your credits!', request: req.headers });
+                    res.json({ data, message: 'Your credits!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
+        app.route('/api/referal')
+            .get(async (req, res, next) => {
+                try {
+                    const { user_id } = req.query;
+                    const uid = user_id || null
+                    const ocrBiz = new OCRBiz();
+                    if (uid) {
+                        const data = await ocrBiz.getReferalById(uid);
+                        res.json({ data, message: 'Your Referal info!' });
+                    } else {
+                        const data = await ocrBiz.getReferals();
+                        res.json({ data, message: 'Total referals!' });
+                    }
                 } catch (error) {
                     next(error);
                 }

@@ -128,13 +128,59 @@ class OCRRepo {
             }
         })
     }
-    updateCredit(user_id, max_credit, credit) {
+    getReferalRepo() {
         return new Promise(async (resolve, reject) => {
             try {
-                // const checkRefQuery = 'SELECT id FROM users WHERE ref_code = ?';
-                // const ref_uid = await mysql.execute(checkRefQuery, [ref_user_id]);
+                let query = `
+                SELECT * FROM referal`;                
+                const data = await mysql.execute(query, []);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    getReferalByIdRepo(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let innerQuery = 'SELECT user_id FROM referal WHERE user_ref_id IN (?)';
+                let query = `SELECT * FROM users WHERE id IN(${innerQuery})`;
+                const data = await mysql.execute(query, [user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    addReferalRepo(user_id, user_ref_id) {
+        // user_id which is register from other refer code
+        // user_ref_id is which is user refer from
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'INSERT INTO referal (user_id, user_ref_id) VALUES (?, ?);';
+                const data = await mysql.execute(query, [user_id, user_ref_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    checkReferal(user_ref_code) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT id FROM users WHERE ref_code = ?';
+                const id = await mysql.execute(query, [user_ref_code]);
+                resolve(id);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    updateCredit(ids, max_credit, credit) {
+        return new Promise(async (resolve, reject) => {
+            try {
                 const query = 'UPDATE credits  SET max_credit = max_credit + (?), avail_credit = avail_credit +  (?) WHERE user_id IN (?)'; // WHERE user_id IN(?)
-                const data = await mysql.execute(query, [max_credit, credit, [user_id]]);
+                const data = await mysql.execute(query, [max_credit, credit, ids]);
                 resolve(data);
             } catch (error) {
                 reject(error);

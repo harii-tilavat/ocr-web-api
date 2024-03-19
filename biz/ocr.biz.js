@@ -7,6 +7,7 @@ const BaseException = require('../exceptions/base.exception');
 const json2xls = require('json2xls');
 const FileListModel = require('../models/FileList');
 const { OCRService } = require('../services/ocr.service');
+const UserListModel = require('../models/UserList');
 
 class OCRBiz {
     constructor() {
@@ -102,10 +103,39 @@ class OCRBiz {
             }
         })
     }
-    updateCredits(user_id,max_credit, credit) {
+    getReferalById(user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const lookup = await this.ocrRepo.updateCredit(user_id, max_credit,credit);
+                const lookup = await this.ocrRepo.getReferalByIdRepo(user_id);
+                if (lookup && lookup.length) {
+                    const data = lookup.map(item => new UserListModel(item));
+                    resolve(data);
+                } else {
+                    throw new BaseException('Id not found!', 404);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    getReferals() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.ocrRepo.getReferalRepo();
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException('Data not found!', 404);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    updateCredits(ids, max_credit, credit) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.ocrRepo.updateCredit(ids, max_credit, credit);
                 if (lookup) {
                     resolve(lookup);
                 } else {

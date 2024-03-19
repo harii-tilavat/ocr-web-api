@@ -1,0 +1,12 @@
+Example
+
+BEGIN
+WHILE (SELECT MIN(emp_salary) FROM employee) < 80000
+BEGIN
+UPDATE employee SET emp_salary = emp_salary + 10000;
+PRINT 'Salary updated';
+IF ( SELECT MIN(emp_salary) FROM employee) >= 80000
+PRINT 'Min. Salary is greater or equal to 80000.';
+BREAK;
+END
+END
