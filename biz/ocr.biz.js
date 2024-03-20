@@ -7,6 +7,7 @@ const BaseException = require('../exceptions/base.exception');
 const json2xls = require('json2xls');
 const FileListModel = require('../models/FileList');
 const { OCRService } = require('../services/ocr.service');
+const UserListModel = require('../models/UserList');
 
 class OCRBiz {
     constructor() {
@@ -24,13 +25,6 @@ class OCRBiz {
                 if (lookup && lookup.length > 0) {
                     const data = lookup.map(item => new FileListModel(item));
                     documentObj = data[0];
-                    const ocrService = new OCRService();
-                    const fileUrlText = `uploads/text_files/${id}.txt`;
-                    const fileUrlWord = `uploads/word_files/${id}.doc`;
-                    const fileUrlExcel = `uploads/excel_files/${id}.xlsx`;
-                    ocrService.generateTextFile(fileUrlText, documentObj.ocr_text);
-                    ocrService.convertTextToWord(fileUrlWord, documentObj.ocr_text);
-                    ocrService.convertJsonToExcel(fileUrlExcel, documentObj);
                     this.updateCredits(user_id, 0, -1);
                 }
                 resolve(documentObj);
@@ -102,10 +96,39 @@ class OCRBiz {
             }
         })
     }
-    updateCredits(user_id,max_credit, credit) {
+    getReferalById(user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const lookup = await this.ocrRepo.updateCredit(user_id, max_credit,credit);
+                const lookup = await this.ocrRepo.getReferalByIdRepo(user_id);
+                if (lookup) {
+                    const data = lookup.map(item => new UserListModel(item));
+                    resolve(data);
+                } else {
+                    throw new BaseException('Id not found!', 404);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    getReferals() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.ocrRepo.getReferalRepo();
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException('Data not found!', 404);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    updateCredits(ids, max_credit, credit) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.ocrRepo.updateCredit(ids, max_credit, credit);
                 if (lookup) {
                     resolve(lookup);
                 } else {
@@ -175,13 +198,60 @@ class OCRBiz {
             }
         })
     }
+    downloadFile(data, user_id, type) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const ocrService = new OCRService();
+                let url = '';
+                let text = '';
+                if (data && data.id && data.ocr_text) {
+                    url = path.resolve('uploads/converted/' + data);
+                    text = data && data.ocr_text;
+                }
+
+                if (type === 'WORD') {
+                    url = url + '.doc';
+                    await ocrService.convertTextToWord(url, text);
+                    resolve(url);
+                }
+                else if (type === 'TEXT') {
+                    url = url + '.txt';
+                    await ocrService.generateTextFile(url, text);
+                    resolve(url);
+                }
+                else if (type === 'UPLOADED_FILE') {
+                    let newUrl = data.image_url ? data.image_url.replace('/', '') : '';
+                    newUrl = path.resolve(newUrl);
+                    if (fs.existsSync(newUrl)) {
+                        resolve(newUrl);
+                    } else {
+                        throw new BaseException('File not exists! ', 405);
+                    }
+                }
+                else if (type === 'EXPORT_EXCEL') {
+                    const ocrBiz = new OCRBiz();
+                    const filepath = await ocrBiz.exportDocumentExcel(user_id);
+                    if (fs.existsSync(filepath)) {
+                        resolve(filepath);
+                    } else {
+                        throw new BaseException('Data can not be exported! ', 404);
+                    }
+                }
+                else {
+                    throw new BaseException('File downloading error!!!');
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     exportDocumentExcel(user_id) {
         return new Promise(async (resolve, reject) => {
             try {
                 const ocrService = new OCRService();
                 const lookup = await this.getDocumentList(user_id);
                 const data = lookup.map(item => new FileListModel(item));
-                const fileUrlExcel = path.resolve(`uploads/excel_files/${user_id}.xls`);
+                const fileUrlExcel = path.resolve(`uploads/converted/${user_id}.xls`);
                 ocrService.convertJsonToExcel(fileUrlExcel, data);
                 resolve(fileUrlExcel);
             } catch (error) {

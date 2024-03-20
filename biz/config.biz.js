@@ -44,7 +44,16 @@ class ConfigBiz {
                 if (isRegister) {
                     const lookup = await this.configRepo.userLoginRepo(userdata.username, userdata.password);
                     const creditData = await ocrRepo.addCredits(id);
+
                     if (creditData) {
+                        if (userdata.user_ref_code) {
+                            const data = await ocrRepo.checkReferal(userdata.user_ref_code);
+                            if (data && data.length > 0) {
+                                const user_ref_id = data[0].id;
+                                await ocrRepo.updateCredit([id, user_ref_id], 10, 10);
+                                await ocrRepo.addReferalRepo(id, user_ref_id);
+                            }
+                        }
                         resolve(lookup[0]);
                     } else {
                         throw new BaseException('Something went wrong!', 409);
