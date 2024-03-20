@@ -8,6 +8,9 @@ const storage = multer.memoryStorage();
 const testupload = multer({ storage: storage });
 const pdfParse = require('pdf-parse');
 const officegen = require('officegen');
+const fs = require('fs');
+const path = require('path');
+const { OCRService } = require("../services/ocr.service");
 class OCRController {
     register(app) {
         app.route('/api/docs')
@@ -92,12 +95,23 @@ class OCRController {
                 }
             })
         app.route('/download')
-            .get(async (req, res, next) => {
+            .post(async (req, res, next) => {
                 try {
-                    res.download('uploads/pdf-file.jpg', (err) => {
-                        if (err) throw err;
-                        // console.log("File download");
-                    })
+                    const { data, user_id, type } = req.body;
+                    const ocrBiz = new OCRBiz();
+                    const file_url = await ocrBiz.downloadFile(data, user_id, type);
+                    if (fs.existsSync(file_url)) {
+                        res.download(file_url, (err) => {
+                            if (err) throw err;
+                            if (!(type === 'UPLOADED_FILE')) {
+                                fs.unlinkSync(file_url);
+                            }
+                            console.log("File downloaded");
+                        })
+                    }
+                    else {
+                        throw new BaseException('File not exists!', 404);
+                    }
                 } catch (error) {
                     next(error);
                 }
@@ -141,18 +155,6 @@ class OCRController {
                     next(error);
                 }
             })
-        app.route('/api/export/:id')
-            .get(async (req, res, next) => {
-                try {
-                    const { id } = req.params;
-                    const ocrBiz = new OCRBiz();
-                    const filepath = await ocrBiz.exportDocumentExcel(id);
-                    res.sendFile(filepath);
-                    console.log("ERROR => downloading");
-                } catch (error) {
-                    next(error);
-                }
-            })
         app.route('/pdf-to-word')
             .post(testupload.single('file'), async (req, res, next) => {
                 try {
@@ -161,7 +163,7 @@ class OCRController {
                     let dataBuffer = await pdfParse(pdfBuffer);
 
                     let docx = officegen('docx');
-
+                    docx.createP().addText(dataBuffer.text);
                     docx.on('error', function (err) {
                         console.log(err);
                     });
@@ -170,7 +172,6 @@ class OCRController {
                         console.log('Finish to create Word file.\nTotal bytes created: ' + written + '\n');
                     });
 
-                    docx.createP().addText(dataBuffer.text);
 
                     res.attachment('output.docx');
                     docx.generate(res);
