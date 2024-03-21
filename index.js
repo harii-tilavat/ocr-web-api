@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 const { loggerMiddleware, requestMiddleware, errorHandlingMiddleware, responseMiddleware } = require('./middleware');
@@ -22,3 +23,5 @@ app.listen(PORT, () => {
 	console.log('-----------------------------------------------');
 	console.log(`Server running on http://localhost:${PORT} 😎`);
 })
+console.log("Hello");
+console.log(fs.existsSync('uploads/files/sample.pdf'));
