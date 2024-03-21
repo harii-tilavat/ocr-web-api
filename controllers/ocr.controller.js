@@ -7,7 +7,6 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const testupload = multer({ storage: storage });
 const pdfParse = require('pdf-parse');
-const officegen = require('officegen');
 const fs = require('fs');
 const path = require('path');
 const { OCRService } = require("../services/ocr.service");
@@ -159,22 +158,9 @@ class OCRController {
             .post(testupload.single('file'), async (req, res, next) => {
                 try {
                     let pdfBuffer = req.file.buffer;
+                    let outputImages = await pdf2img.convert(pdfBuffer);
 
-                    let dataBuffer = await pdfParse(pdfBuffer);
-
-                    let docx = officegen('docx');
-                    docx.createP().addText(dataBuffer.text);
-                    docx.on('error', function (err) {
-                        console.log(err);
-                    });
-
-                    docx.on('finalize', function (written) {
-                        console.log('Finish to create Word file.\nTotal bytes created: ' + written + '\n');
-                    });
-
-
-                    res.attachment('output.docx');
-                    docx.generate(res);
+                    res.send({ hello: 'Test' });
                 } catch (error) {
                     next(error);
                 }

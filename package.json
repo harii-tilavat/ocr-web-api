@@ -29,6 +29,7 @@
     "nodemailer": "^6.9.11",
     "officegen": "^0.6.5",
     "pdf-img-convert": "^1.2.1",
+    "pdf-lib": "^1.17.1",
     "pdf-parse": "^1.1.1",
     "say": "^0.16.0",
     "uuid": "^9.0.1"
