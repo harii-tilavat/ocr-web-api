@@ -77,7 +77,6 @@ class OCRController {
                 } catch (error) {
                     next(error);
                 }
-
             })
             .patch(async (req, res, next) => {
                 try {

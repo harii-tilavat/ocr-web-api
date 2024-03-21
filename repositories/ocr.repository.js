@@ -26,7 +26,7 @@ class OCRRepo {
                 let search = searchQuery;
                 let query = `SELECT * FROM documents WHERE user_id = ? AND is_deleted = 0 AND is_archive = 0 `;
                 if (search) {
-                    query = query + `AND file_type LIKE '%${search}%'`;
+                    query = query + `AND (file_type LIKE '%${search}%' OR file_name LIKE '%${search}%')`;
                 }
                 query = query + 'order by created_at DESC';
                 const data = await mysql.execute(query, [user_id]);
@@ -132,7 +132,7 @@ class OCRRepo {
         return new Promise(async (resolve, reject) => {
             try {
                 let query = `
-                SELECT * FROM referal`;                
+                SELECT * FROM referal`;
                 const data = await mysql.execute(query, []);
                 resolve(data);
             } catch (error) {

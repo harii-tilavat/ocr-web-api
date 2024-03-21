@@ -23,5 +23,11 @@ app.listen(PORT, () => {
 	console.log('-----------------------------------------------');
 	console.log(`Server running on http://localhost:${PORT} 😎`);
 })
-console.log("Hello");
-console.log(fs.existsSync('uploads/files/sample.pdf'));
+// const { OCRService } = require('./services/ocr.service');
+// async function test() {
+// 	const file_path = 'uploads/files/sample.pdf';
+// 	const ocrService = new OCRService();
+// 	const data = await ocrService.convertTextFromPdf(file_path);
+// 	console.log("Data => ", data.text);
+// }
+// test();

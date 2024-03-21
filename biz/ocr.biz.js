@@ -18,8 +18,17 @@ class OCRBiz {
             try {
                 const id = uuidv4();
                 const { filename } = file;
+                const ocrService = new OCRService();
                 const image_url = `/uploads/files/${filename}`;
-                const data = { ...(await veryfiClient.process_document(file.path, [], true)), id, image_url, ...file, };
+                let ocr_text = '';
+                if (file && file.mimetype === 'application/pdf') {
+                    ocr_text = await ocrService.convertTextFromPdf(file.path);
+                } else {
+                    // const ocr_data = await veryfiClient.process_document(file.path, [], true);
+                    // ocr_text = ocr_data.ocr_text;
+                    ocr_text = await ocrService.convertTextFromImage(file.path);
+                }
+                const data = { ocr_text, id, image_url, ...file };
                 const lookup = await this.ocrRepo.uploadDocRepo(data, user_id);
                 let documentObj = {};
                 if (lookup && lookup.length > 0) {
