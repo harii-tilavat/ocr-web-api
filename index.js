@@ -31,3 +31,4 @@ app.listen(PORT, () => {
 // 	console.log("Data => ", data.text);
 // }
 // test();
+console.log(process.env.ADVANCE_MODE);
