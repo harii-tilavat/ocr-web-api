@@ -271,5 +271,68 @@ class OCRBiz {
             }
         })
     }
+    getFeedbackList() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // this.ocrRepo.
+                const lookup = await this.ocrRepo.getFeedbackRepo();
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException("Data not found!");
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    setFeedback(contact) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // ----------- Bussiness Logic ------
+                // const { empName, empLocation, empPosition, empSalary } = employee;
+                const lookup = await this.ocrRepo.setFeedbackRepo(contact);
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException("Data not found!");
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    getContactList() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // this.ocrRepo.
+                const lookup = await this.ocrRepo.getContactRepo();
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException("Data not found!");
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    setContact(contact) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // ----------- Bussiness Logic ------
+                // const { empName, empLocation, empPosition, empSalary } = employee;
+                const lookup = await this.ocrRepo.setContactRepo(contact);
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException("Data not found!");
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 }
 module.exports = OCRBiz;

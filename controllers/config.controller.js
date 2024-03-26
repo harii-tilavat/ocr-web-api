@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 
 class ConfigController {
     register(app) {
-        app.route('/users')
+        app.route('/api/users')
             .get(async (req, res, next) => {
                 try {
                     const configBiz = new ConfigBiz();
@@ -90,6 +90,7 @@ class ConfigController {
                     next(error);
                 }
             })
+        
 
     }
 }

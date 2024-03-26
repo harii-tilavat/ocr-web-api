@@ -187,5 +187,63 @@ class OCRRepo {
             }
         })
     }
+    getFeedbackRepo() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = "SELECT * FROM feedback";
+                const data = await mysql.execute(query, []);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    setFeedbackRepo(contact) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // Generate unique employee id
+                const { user_id, rating, comment } = contact;
+                const query =
+                    "INSERT INTO `feedback`(`user_id`, `rating`, `comment`) VALUES (?,?,?)";
+                const data = await mysql.execute(query, [user_id, rating, comment]);
+                resolve(data);
+                debugger;
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    getContactRepo() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = "SELECT * FROM contact";
+                const data = await mysql.execute(query, []);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    setContactRepo(contact) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // Generate unique employee id
+                const { name, surname, email, subject, message } = contact;
+                const query =
+                    "INSERT INTO `contact`(`name`, `surname`, `email`, `subject`, `message`) VALUES (?,?,?,?,?)";
+                const data = await mysql.execute(query, [
+                    name,
+                    surname,
+                    email,
+                    subject,
+                    message,
+                ]);
+                resolve(data);
+                debugger;
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 }
 module.exports = OCRRepo;
