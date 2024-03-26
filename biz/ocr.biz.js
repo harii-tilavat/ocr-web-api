@@ -45,6 +45,21 @@ class OCRBiz {
             }
         })
     }
+    getAllDocs(){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.ocrRepo.getAllDocsRepo();
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException('Data not found!');
+                }
+            } catch (error) {
+                reject(error);
+            }
+
+        }) 
+    }
     getDocumentList(user_id, query) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -97,9 +112,13 @@ class OCRBiz {
                 const lookup = await this.ocrRepo.getCreditsRepo(user_id);
                 let creditObj = {};
                 if (lookup && lookup.length > 0) {
-                    const { avail_credit, max_credit } = lookup[0];
-                    creditObj = { avail_credit, max_credit };
-                    resolve(creditObj);
+                    if (user_id) {
+                        const { avail_credit, max_credit } = lookup[0];
+                        creditObj = { avail_credit, max_credit };
+                        resolve(creditObj);
+                    } else {
+                        resolve(lookup);
+                    }
                 } else {
                     throw new BaseException('Id not found!', 404);
                 }

@@ -20,6 +20,17 @@ class OCRRepo {
             }
         });
     }
+    getAllDocsRepo() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let query = `SELECT file_size,file_type FROM documents WHERE is_deleted = 0 `;
+                const data = await mysql.execute(query);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
     getDocumentListRepo(user_id, searchQuery) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -207,7 +218,6 @@ class OCRRepo {
                     "INSERT INTO `feedback`(`user_id`, `rating`, `comment`) VALUES (?,?,?)";
                 const data = await mysql.execute(query, [user_id, rating, comment]);
                 resolve(data);
-                debugger;
             } catch (error) {
                 reject(error);
             }
@@ -239,7 +249,6 @@ class OCRRepo {
                     message,
                 ]);
                 resolve(data);
-                debugger;
             } catch (error) {
                 reject(error);
             }

@@ -12,6 +12,16 @@ const path = require('path');
 const { OCRService } = require("../services/ocr.service");
 class OCRController {
     register(app) {
+        app.route('/api/documents')
+            .get(async (req, res, next) => {
+                try {
+                    const ocrBiz = new OCRBiz();
+                    const data = await ocrBiz.getAllDocs();
+                    res.json({ data, message: 'Document list' });
+                } catch (error) {
+                    next(error);
+                }
+            })
         app.route('/api/docs')
             .get(async (req, res, next) => {
                 try {
@@ -93,7 +103,7 @@ class OCRController {
                     next(error);
                 }
             })
-            
+
         app.route('/download')
             .post(async (req, res, next) => {
                 try {
@@ -116,16 +126,6 @@ class OCRController {
                     next(error);
                 }
             })
-        app.route('/api/contact')
-            .post(async (req, res, next) => {
-                try {
-                    // Himanshu your code will here
-                    const data = req.body;
-                    console.log("Data => ", data);
-                } catch (error) {
-                    next(error);
-                }
-            })
         app.route('/api/credits')
             .get(async (req, res, next) => {
                 try {
@@ -138,6 +138,9 @@ class OCRController {
                     next(error);
                 }
             })
+        // .put(async (req, res, next) => {
+
+        // })
         app.route('/api/referal')
             .get(async (req, res, next) => {
                 try {
@@ -202,10 +205,10 @@ class OCRController {
             .post(async (req, res, next) => {
                 try {
                     //code
-                    console.log("Body ==>> ", req.body.name);
+                    // console.log("Body ==>> ", req.body.name);
                     const ocrBiz = new OCRBiz();
                     const data = await ocrBiz.setFeedback(req.body);
-                    res.json({ data, message: "Inserted successfully" });
+                    res.json({ data, message: "Feedback inserted successfully" });
 
                     // const data = req.body;
                     console.log("Data => ", data);
