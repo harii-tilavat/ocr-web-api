@@ -90,8 +90,6 @@ class ConfigController {
                     next(error);
                 }
             })
-        
-
     }
 }
 module.exports = ConfigController;

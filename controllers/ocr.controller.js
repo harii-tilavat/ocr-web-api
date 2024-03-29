@@ -7,9 +7,8 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const testupload = multer({ storage: storage });
 const pdfParse = require('pdf-parse');
+const stripe = require("stripe")(process.env.SECRET_STRIPE_KEY);
 const fs = require('fs');
-const path = require('path');
-const { OCRService } = require("../services/ocr.service");
 class OCRController {
     register(app) {
         app.route('/api/documents')
@@ -216,30 +215,34 @@ class OCRController {
                     next(error);
                 }
             });
-        app.route("/checkout")
+        app.route("/api/checkout")
             .post(async (req, res, next) => {
                 try {
                     console.log(req.body.items);
-                    const session = await stripe.checkout.sessions.create({
-                        payment_method_types: ["card"],
-                        mode: "payment",
+                    if (req.body && req.body.items) {
+                        const session = await stripe.checkout.sessions.create({
+                            payment_method_types: ["card"],
+                            mode: "payment",
 
-                        line_items: req.body.items.map((item) => {
-                            return {
-                                price_data: {
-                                    currency: "inr",
-                                    product_data: {
-                                        name: item.name,
+                            line_items: req.body.items.map((item) => {
+                                return {
+                                    price_data: {
+                                        currency: "inr",
+                                        product_data: {
+                                            name: item.name,
+                                        },
+                                        unit_amount: item.price * 100,
                                     },
-                                    unit_amount: item.price * 100,
-                                },
-                                quantity: item.quantity,
-                            };
-                        }),
-                        success_url: "http://localhost:8000/success",
-                        cancel_url: "http://localhost:8000/cancel",
-                    });
-                    res.json({ url: session.url });
+                                    quantity: item.quantity,
+                                };
+                            }),
+                            success_url: "http://localhost:8080/user",
+                            cancel_url: "http://localhost:8080/user",
+                        });
+                        res.json({ url: session.url });
+                    } else {
+                        throw new BaseException('Provide item fields!');
+                    }
                 } catch (error) {
                     next(error);
                 }

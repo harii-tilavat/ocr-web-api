@@ -234,9 +234,9 @@ class OCRBiz {
             try {
                 const ocrService = new OCRService();
                 let url = '';
+                url = path.resolve('uploads/converted/' + (data && data.id || uuidv4()) );
                 let text = '';
-                if (data && data.id && data.ocr_text) {
-                    url = path.resolve('uploads/converted/' + data);
+                if (data && data.ocr_text) {
                     text = data && data.ocr_text;
                 }
 
@@ -267,6 +267,11 @@ class OCRBiz {
                     } else {
                         throw new BaseException('Data can not be exported! ', 404);
                     }
+                }
+                else if(type === 'EXCEL'){
+                    url = url + '.xls';
+                    await ocrService.convertJsonToExcel(url, data);
+                    resolve(url);
                 }
                 else {
                     throw new BaseException('File downloading error!!!');
