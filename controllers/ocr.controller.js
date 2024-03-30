@@ -137,6 +137,14 @@ class OCRController {
                     next(error);
                 }
             })
+            .post(async (req, res, next) => {
+                try {
+                    // const { data } = req.body;
+                    // const ocrBiz = new OCRBiz();
+                } catch (error) {
+                    next(error);
+                }
+            })
         // .put(async (req, res, next) => {
 
         // })

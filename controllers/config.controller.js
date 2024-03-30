@@ -4,6 +4,8 @@ const ConfigUserPostRequest = require("./../models/ConfigUserPostRequest")
 const { OCRService } = require("./../services/ocr.service");
 const { SchemaJsonValidator } = require("./../validators");
 const nodemailer = require('nodemailer');
+const { otp_email } = require("../middleware/otp");
+const OCRBiz = require("../biz/ocr.biz");
 
 class ConfigController {
     register(app) {
@@ -21,6 +23,16 @@ class ConfigController {
             .post(async (req, res, next) => {
                 try {
                     const body = new ConfigUserPostRequest(req.body);
+                    // OTP
+                    // console.log("🚀 ~ ConfigController ~ .post ~ req.body:", req.body)
+                    // const otp = `${Math.floor(Math.random() * (9999 - 9000 + 1) + 1000)}`
+                    // console.log(otp);
+                    // const users = {
+                    //     otp: otp,
+                    //     email : req.body.email
+                    // }
+                    // otp_email(users);
+                    // OTP
                     const schema = new SchemaJsonValidator();
                     await schema.createUser(req.body);
                     const configBiz = new ConfigBiz();
@@ -35,7 +47,7 @@ class ConfigController {
             .put(async (req, res, next) => {
                 try {
                     const userdata = req.body;
-                    const {id} = req.params;
+                    const { id } = req.params;
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.updateUser(id, userdata);
                     res.json({ data, message: 'Your detail has been updated successfully!' });
@@ -43,6 +55,19 @@ class ConfigController {
                     next(error);
                 }
             })
+
+        app.route('/update-type')
+            .put(async (req, res, next) => {
+                try {
+                    const userdata = req.body;
+                    const configBiz = new ConfigBiz();
+                    const data = await configBiz.updateType(id, userdata);
+                    res.json({ data, message: 'User type has been updated successfully!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
+
         app.route('/login')
             .post(async (req, res, next) => {
                 try {
@@ -86,6 +111,35 @@ class ConfigController {
                     });
                     // console.log("Trasport ==>> ", transporter);
                     res.json({ otp, transporter });
+                } catch (error) {
+                    next(error);
+                }
+            })
+            .post(async (req, res, next) => {
+                try {
+                    const body = new ConfigUserPostRequest(req.body);
+                    const ocrService = new OCRService();
+                    // OTP
+                    console.log("🚀 ~ ConfigController ~ .post ~ req.body:", req.body)
+                    const otp = ocrService.generateOtp();
+                    console.log(otp);
+                    const users = {
+                        otp: otp,
+                        email: req.body.email
+                    }
+                    otp_email(users);
+                    res.json({ msg: 'Email sent' });
+                } catch (error) {
+                    next();
+                }
+            })
+        app.route('/forgot-password')
+            .post(async (req, res, next) => {
+                try {
+                    const { email } = req.body;
+                    const configBiz = new ConfigBiz();
+                    const data = await configBiz.getUserByEmail(email);
+                    res.json({ message: `We have sent you reset password email at the ${email}`, data });
                 } catch (error) {
                     next(error);
                 }

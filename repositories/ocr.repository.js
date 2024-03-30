@@ -77,7 +77,7 @@ class OCRRepo {
     getCreditsRepo(user_id) {
         return new Promise(async (resolve, reject) => {
             try {
-                let query = 'SELECT * FROM credits';
+                let query = 'SELECT c.*,u.username FROM credits c INNER JOIN users u ON c.user_id = u.id';
                 if (user_id) {
                     query = query + ` WHERE user_id = '${user_id}'`
                 }
@@ -201,7 +201,7 @@ class OCRRepo {
     getFeedbackRepo() {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = "SELECT * FROM feedback";
+                const query = "SELECT f.*,u.username FROM feedback f INNER JOIN users u ON f.user_id = u.id";
                 const data = await mysql.execute(query, []);
                 resolve(data);
             } catch (error) {
