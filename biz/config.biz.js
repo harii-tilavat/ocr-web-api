@@ -92,7 +92,20 @@ class ConfigBiz {
             }
         })
     }
-    // updateUser() {
+    updateType(user_id, data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const userdata = { ...data };
+                const lookup = await this.configRepo.updateType(user_id, userdata);
+                if (lookup) {
+                    resolve(lookup);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+        // updateUser() {
+    }
     //     return new Promise(async (resolve, reject) => {
     //         try {
     //             const lookup = await this.configRepo.userLoginRepo(uName, md5(pwd));
@@ -113,6 +126,20 @@ class ConfigBiz {
                 const jwtSecretKey = fs.readFileSync(path.resolve('./jwtRSA256.key'), { encoding: 'utf8' });
                 const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) + (expiresHour * 60 * 60), ...data }, jwtSecretKey);
                 resolve(token);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    getUserByEmail(email) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const lookup = await this.configRepo.getUserByEmailRepo(email);
+                if (lookup && lookup.length) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException('Email is not registered with us!', 404);
+                }
             } catch (error) {
                 reject(error);
             }

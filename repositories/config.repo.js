@@ -25,7 +25,7 @@ class ConfigRepo {
             }
         })
     }
-    updateUserRepo(user_id,data) {
+    updateUserRepo(user_id, data) {
         return new Promise(async (resolve, reject) => {
             try {
                 const { name, lastname, number, country } = data;
@@ -40,7 +40,7 @@ class ConfigRepo {
     getUserListRepo() {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM users';
+                const query = 'SELECT * FROM users ORDER BY TYPE, created_at DESC';
                 const data = await mysql.execute(query);
                 const userList = data.map(item => new UserListModel(item));
                 resolve(userList);
@@ -49,6 +49,28 @@ class ConfigRepo {
             }
         })
     }
-
+    updateTypeRepo(user_id, data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { type } = data;
+                const query = `UPDATE users SET TYPE = ? WHERE id = ?`;
+                const lookup = await mysql.execute(query, [type, user_id]);
+                resolve(lookup);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    getUserByEmailRepo(email) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT * FROM users WHERE email = ?';
+                const lookup = await mysql.execute(query, [email]);
+                resolve(lookup);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
 }
 module.exports = ConfigRepo;
