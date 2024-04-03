@@ -4,7 +4,7 @@ class ConfigRepo {
     userLoginRepo(username, password) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+                const query = 'SELECT * FROM users WHERE username = ? AND password = ? AND is_verified = 1';
                 const userObj = await mysql.execute(query, [username, password]);
                 const data = userObj.map(item => new UserListModel(item));
                 resolve(data);
@@ -67,6 +67,50 @@ class ConfigRepo {
                 const query = 'SELECT * FROM users WHERE email = ?';
                 const lookup = await mysql.execute(query, [email]);
                 resolve(lookup);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    addOtpRepo(user_id, otp, expirationTime) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'INSERT INTO otps (user_id, otp, expires_at) VALUES (?, ?, ?)';
+                await mysql.execute(query, [user_id, otp, expirationTime]);
+                resolve(true);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    verifyOTPRepo(otp) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT user_id FROM otps WHERE otp = ?'; //AND expires_at > NOW()
+                const data = await mysql.execute(query, [otp]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    verifyUser(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'UPDATE users SET is_verified = 1 WHERE id = ?';
+                const data = await mysql.execute(query, [user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    removeOtp(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'UPDATE otps SET otp = NULL, expires_at = NULL WHERE user_id = ?';
+                const data = await mysql.execute(query, [user_id]);
+                resolve(data);
             } catch (error) {
                 reject(error);
             }
