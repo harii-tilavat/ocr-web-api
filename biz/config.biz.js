@@ -110,6 +110,25 @@ class ConfigBiz {
         })
         // updateUser() {
     }
+    resetPassword(userdata) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { password, newPassword, user_id } = userdata;
+                if (!(password && newPassword && user_id)) {
+                    throw new BaseException('Provide all required fields', 401);
+                }
+                const lookup = await this.configRepo.validPasswordRepo(user_id, md5(password));
+                if (lookup && lookup.length > 0) {
+                    const data = await this.configRepo.resetPasswordRepo(user_id, md5(newPassword));
+                    resolve(data);
+                } else {
+                    throw new BaseException('Invalid Password! Try again', 401);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     addOtp(email, user_id) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -137,7 +156,7 @@ class ConfigBiz {
     verifyOTPRepo(otp) {
         return new Promise(async (resolve, reject) => {
             try {
-                if(!otp){
+                if (!otp) {
                     throw new BaseException('Enter a valid OTP!');
                 }
                 const lookup = await this.configRepo.verifyOTPRepo(otp);

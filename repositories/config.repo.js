@@ -72,6 +72,28 @@ class ConfigRepo {
             }
         })
     }
+    validPasswordRepo(user_id, password){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT * FROM users WHERE id = ? AND password = ?';
+                const data = await mysql.execute(query, [user_id,password]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    resetPasswordRepo(user_id,password){
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = `UPDATE users SET password = ? WHERE id = ?`;
+                const data = await mysql.execute(query, [password, user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     addOtpRepo(user_id, otp, expirationTime) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -116,5 +138,6 @@ class ConfigRepo {
             }
         })
     }
+
 }
 module.exports = ConfigRepo;

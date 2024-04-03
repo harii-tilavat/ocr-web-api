@@ -139,6 +139,19 @@ class ConfigController {
                     next(error);
                 }
             })
+
+        app.route('/reset-password')
+            .post(async (req, res, next) => {
+                try {
+                    const configBiz = new ConfigBiz();
+                    const data = await configBiz.resetPassword(req.body);
+
+                    res.json({ data, message: 'Your password has been changed!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
+
         app.route('/forgot-password')
             .post(async (req, res, next) => {
                 try {
