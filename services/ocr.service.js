@@ -99,8 +99,8 @@ class OCRService {
                     port: 465,
                     secure: true,
                     auth: {
-                        user: 'ocrweb441@gmail.com',
-                        pass: 'rmmj ffqr naah trfx'
+                        user: process.env.GMAIL,
+                        pass: process.env.GMAIL_PASSWORD
                     }
                 });
                 let info = transporter.sendMail({
@@ -118,6 +118,7 @@ class OCRService {
 
                 }, function (err) {
                     if (!err) {
+                        // console.log("Email sent");
                         resolve(true);
                     } else {
                         reject(err)

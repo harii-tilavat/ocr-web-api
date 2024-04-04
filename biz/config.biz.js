@@ -63,11 +63,11 @@ class ConfigBiz {
                         throw new BaseException('Enter valid email!', 409);
                     }
                 } else {
-                    throw new BaseException('already username exists try different one!', 409);
+                    throw new BaseException('already username or email exists try different one!', 409);
                 }
             } catch (error) {
                 if (error && error.code == 'ER_DUP_ENTRY') {
-                    reject(new BaseException('already username exists try different one!', 409));
+                    reject(new BaseException('already username or email exists try different one!', 409));
                 }
                 reject(error);
             }
@@ -115,7 +115,7 @@ class ConfigBiz {
             try {
                 const { password, newPassword, user_id } = userdata;
                 if (!(password && newPassword && user_id)) {
-                    throw new BaseException('Provide all required fields', 401);
+                    throw new BaseException('Provide all required fields');
                 }
                 const lookup = await this.configRepo.validPasswordRepo(user_id, md5(password));
                 if (lookup && lookup.length > 0) {
