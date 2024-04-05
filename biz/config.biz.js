@@ -42,9 +42,9 @@ class ConfigBiz {
 
                 const isRegister = await this.configRepo.userSignupRepo(userdata);
                 if (isRegister) {
-                    const lookup = await this.configRepo.userLoginRepo(userdata.username, userdata.password);
+                    // const lookup = await this.configRepo.userLoginRepo(userdata.username, userdata.password);
                     const creditData = await ocrRepo.addCredits(id);
-
+                    const otpSent = await this.addOtp(data.email, id);
                     if (creditData) {
                         if (userdata.user_ref_code) {
                             const data = await ocrRepo.checkReferal(userdata.user_ref_code);
@@ -54,16 +54,20 @@ class ConfigBiz {
                                 await ocrRepo.addReferalRepo(id, user_ref_id);
                             }
                         }
-                        resolve(lookup[0]);
                     } else {
                         throw new BaseException('Something went wrong!', 409);
                     }
+                    if (otpSent) {
+                        resolve(isRegister);
+                    } else {
+                        throw new BaseException('Enter valid email!', 409);
+                    }
                 } else {
-                    throw new BaseException('already username exists try different one!', 409);
+                    throw new BaseException('already username or email exists try different one!', 409);
                 }
             } catch (error) {
                 if (error && error.code == 'ER_DUP_ENTRY') {
-                    reject(new BaseException('already username exists try different one!', 409));
+                    reject(new BaseException('already username or email exists try different one!', 409));
                 }
                 reject(error);
             }
@@ -92,13 +96,18 @@ class ConfigBiz {
             }
         })
     }
-    updateType(user_id, data) {
+    updateType(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                const userdata = { ...data };
-                const lookup = await this.configRepo.updateType(user_id, userdata);
+                const { type, user_id, is_verified } = data;
+                if (!(type && user_id)) {
+                    throw new BaseException('Please provide required fields!');
+                }
+                const lookup = await this.configRepo.updateTypeRepo(user_id, type,is_verified);
                 if (lookup) {
                     resolve(lookup);
+                } else {
+                    throw new BaseException('User not exists!', 404);
                 }
             } catch (error) {
                 reject(error);
@@ -106,19 +115,73 @@ class ConfigBiz {
         })
         // updateUser() {
     }
-    //     return new Promise(async (resolve, reject) => {
-    //         try {
-    //             const lookup = await this.configRepo.userLoginRepo(uName, md5(pwd));
-    //             if (lookup && lookup.length > 0) {
-    //                 resolve(lookup[0]);
-    //             } else {
-    //                 throw new BaseException('Invalid user!', 401);
-    //             }
-    //         } catch (error) {
-    //             reject(error);
-    //         }
-    //     })
-    // }
+    resetPassword(userdata) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { password, newPassword, user_id } = userdata;
+                if (!(password && newPassword && user_id)) {
+                    throw new BaseException('Provide all required fields');
+                }
+                const lookup = await this.configRepo.validPasswordRepo(user_id, md5(password));
+                if (lookup && lookup.length > 0) {
+                    const data = await this.configRepo.resetPasswordRepo(user_id, md5(newPassword));
+                    resolve(data);
+                } else {
+                    throw new BaseException('Invalid Password! Try again', 401);
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    addOtp(email, user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const ocrService = new OCRService();
+                const otp = ocrService.generateOtp();
+                const expirationTime = new Date(Date.now() + (60 * 60 * 1000));
+                const users = {
+                    otp: otp,
+                    email: email
+                }
+                const isOtpSent = await ocrService.sendOtp(users, otp);
+                if (isOtpSent) {
+                    const lookup = await this.configRepo.addOtpRepo(user_id, otp, expirationTime);
+                    if (lookup) {
+                        resolve(lookup);
+                    }
+                } else {
+                    throw new BaseException('Otp sending error!');
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    verifyOTPRepo(otp) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!otp) {
+                    throw new BaseException('Enter a valid OTP!');
+                }
+                const lookup = await this.configRepo.verifyOTPRepo(otp);
+                if (lookup && lookup.length) {
+                    const { user_id } = lookup[0];
+                    const isVerified = await this.configRepo.verifyUser(user_id);
+                    if (isVerified) {
+                        await this.configRepo.removeOtp(user_id);
+                        resolve(lookup[0]);
+                    } else {
+                        throw new BaseException('User not verified!');
+                    }
+                } else {
+                    throw new BaseException('Invalid OTP!');
+                }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     jwtTokenEncoded(data) {
         return new Promise(async (resolve, reject) => {
             try {

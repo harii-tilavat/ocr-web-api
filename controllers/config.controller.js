@@ -37,8 +37,7 @@ class ConfigController {
                     await schema.createUser(req.body);
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.registerUser(body);
-                    const token = await configBiz.jwtTokenEncoded(data);
-                    res.json({ token, message: 'User registerd!' });
+                    res.json({ data, message: `We have send you OTP at ${req.body.email}` });
                 } catch (error) {
                     next(error);
                 }
@@ -59,10 +58,9 @@ class ConfigController {
         app.route('/update-type')
             .put(async (req, res, next) => {
                 try {
-                    const userdata = req.body;
                     const configBiz = new ConfigBiz();
-                    const data = await configBiz.updateType(id, userdata);
-                    res.json({ data, message: 'User type has been updated successfully!' });
+                    const data = await configBiz.updateType(req.body);
+                    res.json({ data, message: 'Data has been updated successfully!' });
                 } catch (error) {
                     next(error);
                 }
@@ -118,21 +116,41 @@ class ConfigController {
             .post(async (req, res, next) => {
                 try {
                     const body = new ConfigUserPostRequest(req.body);
-                    const ocrService = new OCRService();
-                    // OTP
-                    console.log("🚀 ~ ConfigController ~ .post ~ req.body:", req.body)
-                    const otp = ocrService.generateOtp();
-                    console.log(otp);
-                    const users = {
-                        otp: otp,
-                        email: req.body.email
-                    }
-                    otp_email(users);
+                    const configBiz = new ConfigBiz();
+                    const { email, user_id } = req.body;
+                    const data = await configBiz.addOtp(email, user_id);
+
                     res.json({ msg: 'Email sent' });
                 } catch (error) {
-                    next();
+                    next(error);
                 }
             })
+        app.route('/verify-otp')
+            .post(async (req, res, next) => {
+                try {
+
+                    const configBiz = new ConfigBiz();
+                    const { otp } = req.body;
+                    const data = await configBiz.verifyOTPRepo(otp);
+
+                    res.json({ data, message: 'You are verified. You can login' });
+                } catch (error) {
+                    next(error);
+                }
+            })
+
+        app.route('/reset-password')
+            .post(async (req, res, next) => {
+                try {
+                    const configBiz = new ConfigBiz();
+                    const data = await configBiz.resetPassword(req.body);
+
+                    res.json({ data, message: 'Your password has been changed!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
+
         app.route('/forgot-password')
             .post(async (req, res, next) => {
                 try {

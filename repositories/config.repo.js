@@ -4,7 +4,7 @@ class ConfigRepo {
     userLoginRepo(username, password) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+                const query = 'SELECT * FROM users WHERE username = ? AND password = ? AND is_verified = 1';
                 const userObj = await mysql.execute(query, [username, password]);
                 const data = userObj.map(item => new UserListModel(item));
                 resolve(data);
@@ -49,12 +49,11 @@ class ConfigRepo {
             }
         })
     }
-    updateTypeRepo(user_id, data) {
+    updateTypeRepo(user_id, type, is_verified) {
         return new Promise(async (resolve, reject) => {
             try {
-                const { type } = data;
-                const query = `UPDATE users SET TYPE = ? WHERE id = ?`;
-                const lookup = await mysql.execute(query, [type, user_id]);
+                const query = `UPDATE users SET TYPE = ?,is_verified = ? WHERE id = ?`;
+                const lookup = await mysql.execute(query, [type, is_verified, user_id]);
                 resolve(lookup);
             } catch (error) {
                 reject(error);
@@ -72,5 +71,72 @@ class ConfigRepo {
             }
         })
     }
+    validPasswordRepo(user_id, password) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT * FROM users WHERE id = ? AND password = ?';
+                const data = await mysql.execute(query, [user_id, password]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    resetPasswordRepo(user_id, password) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = `UPDATE users SET password = ? WHERE id = ?`;
+                const data = await mysql.execute(query, [password, user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    addOtpRepo(user_id, otp, expirationTime) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'INSERT INTO otps (user_id, otp, expires_at) VALUES (?, ?, ?)';
+                await mysql.execute(query, [user_id, otp, expirationTime]);
+                resolve(true);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    verifyOTPRepo(otp) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT user_id FROM otps WHERE otp = ?'; //AND expires_at > NOW()
+                const data = await mysql.execute(query, [otp]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    verifyUser(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'UPDATE users SET is_verified = 1 WHERE id = ?';
+                const data = await mysql.execute(query, [user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    removeOtp(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'UPDATE otps SET otp = NULL, expires_at = NULL WHERE user_id = ?';
+                const data = await mysql.execute(query, [user_id]);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+
 }
 module.exports = ConfigRepo;

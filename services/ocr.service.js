@@ -3,6 +3,7 @@ const fs = require('fs');
 const Tesseract = require('tesseract.js');
 const pdf = require('pdf-parse');
 const { BaseException } = require('../exceptions');
+const nodemailer = require('nodemailer');
 class OCRService {
     generateOtp = () => {
         return Math.floor(100000 + Math.random() * 900000).toString();
@@ -56,7 +57,7 @@ class OCRService {
     generateTextFile = (fileUrl, data) => {
         fs.writeFileSync(fileUrl, data);
     }
-   sendEmail(user, res) {
+    sendEmail(user, res) {
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 465,
@@ -73,22 +74,61 @@ class OCRService {
             template: "email",
             otp: user.otp,
             html: `<p>Thank you for registeringPlease Verify Your OTP : </p><h1>${user.otp} </h1>`
-    
+
         }, function (err) {
             if (err) {
                 return res.send(
                     {
                         message: "email is not sent",
-    
+
                     })
             } else {
                 return res.send(
                     {
                         message: "email sent succesfully !",
-    
+
                     })
             }
         });
+    }
+    sendOtp(user, otp) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 465,
+                    secure: true,
+                    auth: {
+                        user: process.env.GMAIL,
+                        pass: process.env.GMAIL_PASSWORD
+                    }
+                });
+                let info = transporter.sendMail({
+                    from: "ocrweb441@gmail.com", // sender address
+                    to: user.email, // list of receivers
+                    subject: "Verify your otp ✔", // Subject line
+                    template: "email",
+                    otp: user.otp,
+                    html: `
+                        <p>Please Verify Your OTP : </p>
+                        <p>Valid upto 10 minutes! </p>
+                        <h1>${user.otp} </h1>
+                        
+                        `
+
+                }, function (err) {
+                    if (!err) {
+                        // console.log("Email sent");
+                        resolve(true);
+                    } else {
+                        reject(err)
+                        // throw new BaseException('Email sending error!');
+                    }
+                });
+            } catch (error) {
+                reject(error);
+            }
+        })
     }
 }
 
