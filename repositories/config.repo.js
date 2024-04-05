@@ -49,12 +49,11 @@ class ConfigRepo {
             }
         })
     }
-    updateTypeRepo(user_id, data) {
+    updateTypeRepo(user_id, type, is_verified) {
         return new Promise(async (resolve, reject) => {
             try {
-                const { type } = data;
-                const query = `UPDATE users SET TYPE = ? WHERE id = ?`;
-                const lookup = await mysql.execute(query, [type, user_id]);
+                const query = `UPDATE users SET TYPE = ?,is_verified = ? WHERE id = ?`;
+                const lookup = await mysql.execute(query, [type, is_verified, user_id]);
                 resolve(lookup);
             } catch (error) {
                 reject(error);
@@ -72,18 +71,18 @@ class ConfigRepo {
             }
         })
     }
-    validPasswordRepo(user_id, password){
+    validPasswordRepo(user_id, password) {
         return new Promise(async (resolve, reject) => {
             try {
                 const query = 'SELECT * FROM users WHERE id = ? AND password = ?';
-                const data = await mysql.execute(query, [user_id,password]);
+                const data = await mysql.execute(query, [user_id, password]);
                 resolve(data);
             } catch (error) {
                 reject(error);
             }
         })
     }
-    resetPasswordRepo(user_id,password){
+    resetPasswordRepo(user_id, password) {
         return new Promise(async (resolve, reject) => {
             try {
                 const query = `UPDATE users SET password = ? WHERE id = ?`;

@@ -160,7 +160,7 @@ class OCRRepo {
         return new Promise(async (resolve, reject) => {
             try {
                 let innerQuery = 'SELECT user_id FROM referal WHERE user_ref_id IN (?)';
-                let query = `SELECT * FROM users WHERE id IN(${innerQuery})`;
+                let query = `SELECT * FROM users WHERE id IN(${innerQuery}) ORDER BY created_at DESC`;
                 const data = await mysql.execute(query, [user_id]);
                 resolve(data);
             } catch (error) {

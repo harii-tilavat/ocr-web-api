@@ -58,10 +58,9 @@ class ConfigController {
         app.route('/update-type')
             .put(async (req, res, next) => {
                 try {
-                    const userdata = req.body;
                     const configBiz = new ConfigBiz();
-                    const data = await configBiz.updateType(id, userdata);
-                    res.json({ data, message: 'User type has been updated successfully!' });
+                    const data = await configBiz.updateType(req.body);
+                    res.json({ data, message: 'Data has been updated successfully!' });
                 } catch (error) {
                     next(error);
                 }

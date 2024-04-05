@@ -9,6 +9,7 @@ class UserListModel {
         this.type = data.type;
         this.username = data.username;
         this.ref_code = data.ref_code;
+        this.is_verified = data.is_verified;
         this.created_at = data.created_at;
         this.updated_at = data.updated_at;
         this.last_login = data.last_login;

@@ -96,13 +96,18 @@ class ConfigBiz {
             }
         })
     }
-    updateType(user_id, data) {
+    updateType(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                const userdata = { ...data };
-                const lookup = await this.configRepo.updateType(user_id, userdata);
+                const { type, user_id, is_verified } = data;
+                if (!(type && user_id)) {
+                    throw new BaseException('Please provide required fields!');
+                }
+                const lookup = await this.configRepo.updateTypeRepo(user_id, type,is_verified);
                 if (lookup) {
                     resolve(lookup);
+                } else {
+                    throw new BaseException('User not exists!', 404);
                 }
             } catch (error) {
                 reject(error);
