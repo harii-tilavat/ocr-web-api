@@ -255,6 +255,16 @@ class OCRController {
                     next(error);
                 }
             });
+        app.route('/api/dashboard')
+            .get(async (req, res, next) => {
+                try {
+                    const ocrBiz = new OCRBiz();
+                    const data = await ocrBiz.getDashboard();
+                    res.json({ data, message: 'Dashboard detail!' });
+                } catch (error) {
+                    next(error);
+                }
+            })
     }
 }
 module.exports = OCRController

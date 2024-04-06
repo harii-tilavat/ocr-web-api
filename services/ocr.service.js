@@ -57,39 +57,37 @@ class OCRService {
     generateTextFile = (fileUrl, data) => {
         fs.writeFileSync(fileUrl, data);
     }
-    sendEmail(user, res) {
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: 'ocrweb441@gmail.com',
-                pass: 'rmmj ffqr naah trfx'
-            }
-        });
-        let info = transporter.sendMail({
-            from: "ocrweb441@gmail.com", // sender address
-            to: user.email, // list of receivers
-            subject: "Verify your otp ✔", // Subject line
-            template: "email",
-            otp: user.otp,
-            html: `<p>Thank you for registeringPlease Verify Your OTP : </p><h1>${user.otp} </h1>`
+    sendEmail(email,emailConfig) {
+        return new Promise(async (resolve, reject) => {
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: 'ocrweb441@gmail.com',
+                    pass: 'rmmj ffqr naah trfx'
+                }
+            });
+            // const token = await configBiz.jwtTokenEncoded(email);
 
-        }, function (err) {
-            if (err) {
-                return res.send(
-                    {
-                        message: "email is not sent",
-
-                    })
-            } else {
-                return res.send(
-                    {
-                        message: "email sent succesfully !",
-
-                    })
-            }
-        });
+            const mailOptions = {
+                from: 'ocrweb441@gmail.com',
+                to: email,
+                subject: emailConfig.subject,
+                // text: `Click the following link to reset your password: http://localhost:4200/reset-password/${token}`,
+                text: ``,
+                html: emailConfig.htmlContent || '<p> Thank you.</p>'
+            };
+            let info = transporter.sendMail(mailOptions, function (err) {
+                if (!err) {
+                    // console.log("Email sent");
+                    resolve(true);
+                } else {
+                    reject(err)
+                    // throw new BaseException('Email sending error!');
+                }
+            });
+        })
     }
     sendOtp(user, otp) {
         return new Promise(async (resolve, reject) => {

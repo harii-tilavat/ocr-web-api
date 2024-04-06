@@ -103,7 +103,7 @@ class ConfigBiz {
                 if (!(type && user_id)) {
                     throw new BaseException('Please provide required fields!');
                 }
-                const lookup = await this.configRepo.updateTypeRepo(user_id, type,is_verified);
+                const lookup = await this.configRepo.updateTypeRepo(user_id, type, is_verified);
                 if (lookup) {
                     resolve(lookup);
                 } else {
@@ -115,16 +115,28 @@ class ConfigBiz {
         })
         // updateUser() {
     }
-    resetPassword(userdata) {
+    changePassword(userdata) {
         return new Promise(async (resolve, reject) => {
             try {
-                const { password, newPassword, user_id } = userdata;
+                const { password, newPassword, user_id, email } = userdata;
                 if (!(password && newPassword && user_id)) {
                     throw new BaseException('Provide all required fields');
                 }
+                const ocrService = new OCRService();
                 const lookup = await this.configRepo.validPasswordRepo(user_id, md5(password));
                 if (lookup && lookup.length > 0) {
-                    const data = await this.configRepo.resetPasswordRepo(user_id, md5(newPassword));
+                    const data = await this.configRepo.changePasswordRepo(user_id, md5(newPassword));
+                    const emailConfig = {
+                        subject: 'Password changed!',
+                        htmlContent: `
+                        <p>Your password has been succesfully changed! at ${new Date()} <p>
+                        <h4>Thank you from OCR team.<h4>
+                        `
+                    }
+                    const emailSent = await ocrService.sendEmail(email, emailConfig);
+                    if (emailSent) {
+                        console.log("Change password email send");
+                    }
                     resolve(data);
                 } else {
                     throw new BaseException('Invalid Password! Try again', 401);
@@ -137,9 +149,10 @@ class ConfigBiz {
     addOtp(email, user_id) {
         return new Promise(async (resolve, reject) => {
             try {
+                const minute = 10;
                 const ocrService = new OCRService();
                 const otp = ocrService.generateOtp();
-                const expirationTime = new Date(Date.now() + (60 * 60 * 1000));
+                const expirationTime = new Date(Date.now() + (minute * 60 * 1000));
                 const users = {
                     otp: otp,
                     email: email

@@ -82,7 +82,7 @@ class ConfigRepo {
             }
         })
     }
-    resetPasswordRepo(user_id, password) {
+    changePasswordRepo(user_id, password) {
         return new Promise(async (resolve, reject) => {
             try {
                 const query = `UPDATE users SET password = ? WHERE id = ?`;
@@ -107,7 +107,7 @@ class ConfigRepo {
     verifyOTPRepo(otp) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT user_id FROM otps WHERE otp = ?'; //AND expires_at > NOW()
+                const query = 'SELECT user_id FROM otps WHERE otp = ? AND expires_at > NOW()'; //AND expires_at > NOW()
                 const data = await mysql.execute(query, [otp]);
                 resolve(data);
             } catch (error) {

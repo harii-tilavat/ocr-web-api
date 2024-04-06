@@ -23,7 +23,7 @@ class OCRRepo {
     getAllDocsRepo() {
         return new Promise(async (resolve, reject) => {
             try {
-                let query = `SELECT file_size,file_type FROM documents WHERE is_deleted = 0 `;
+                let query = `SELECT file_size,file_type,created_at FROM documents WHERE is_deleted = 0 `;
                 const data = await mysql.execute(query);
                 resolve(data);
             } catch (error) {

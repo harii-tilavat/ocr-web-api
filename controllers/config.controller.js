@@ -139,12 +139,12 @@ class ConfigController {
                 }
             })
 
-        app.route('/reset-password')
+        app.route('/change-password')
             .post(async (req, res, next) => {
                 try {
                     const configBiz = new ConfigBiz();
-                    const data = await configBiz.resetPassword(req.body);
-
+                    const data = await configBiz.changePassword(req.body);
+                    
                     res.json({ data, message: 'Your password has been changed!' });
                 } catch (error) {
                     next(error);
@@ -162,6 +162,24 @@ class ConfigController {
                     next(error);
                 }
             })
+        // app.post('/reset-password', (req, res) => {
+        //     const { token, newPassword } = req.body;
+
+        //     // Verify token
+        //     jwt.verify(token, jwtSecret, (err, decoded) => {
+        //         if (err) {
+        //             return res.status(401).send('Invalid or expired token');
+        //         }
+
+        //         const { email } = decoded;
+
+        //         // Update password in database (replace with your database logic)
+        //         users[email].password = bcrypt.hashSync(newPassword, 10);
+
+        //         res.status(200).send('Password reset successfully');
+        //     });
+        // });
+
     }
 }
 module.exports = ConfigController;
