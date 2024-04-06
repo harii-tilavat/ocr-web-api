@@ -8,6 +8,7 @@ const json2xls = require('json2xls');
 const FileListModel = require('../models/FileList');
 const { OCRService } = require('../services/ocr.service');
 const UserListModel = require('../models/UserList');
+const ConfigRepo = require('../repositories/config.repo');
 
 class OCRBiz {
     constructor() {
@@ -45,7 +46,7 @@ class OCRBiz {
             }
         })
     }
-    getAllDocs(){
+    getAllDocs() {
         return new Promise(async (resolve, reject) => {
             try {
                 const lookup = await this.ocrRepo.getAllDocsRepo();
@@ -58,7 +59,7 @@ class OCRBiz {
                 reject(error);
             }
 
-        }) 
+        })
     }
     getDocumentList(user_id, query) {
         return new Promise(async (resolve, reject) => {
@@ -234,7 +235,7 @@ class OCRBiz {
             try {
                 const ocrService = new OCRService();
                 let url = '';
-                url = path.resolve('uploads/converted/' + (data && data.id || uuidv4()) );
+                url = path.resolve('uploads/converted/' + (data && data.id || uuidv4()));
                 let text = '';
                 if (data && data.ocr_text) {
                     text = data && data.ocr_text;
@@ -268,7 +269,7 @@ class OCRBiz {
                         throw new BaseException('Data can not be exported! ', 404);
                     }
                 }
-                else if(type === 'EXCEL'){
+                else if (type === 'EXCEL') {
                     url = url + '.xls';
                     await ocrService.convertJsonToExcel(url, data);
                     resolve(url);
@@ -348,6 +349,33 @@ class OCRBiz {
                 // ----------- Bussiness Logic ------
                 // const { empName, empLocation, empPosition, empSalary } = employee;
                 const lookup = await this.ocrRepo.setContactRepo(contact);
+                if (lookup) {
+                    resolve(lookup);
+                } else {
+                    throw new BaseException("Data not found!");
+                }
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+    getDashboard() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                // this.ocrRepo.
+                const configRepo = new ConfigRepo();
+                const docsList = await this.ocrRepo.getAllDocsRepo();
+                const contactList = await this.ocrRepo.getContactRepo();
+                const feedbackList = await this.ocrRepo.getFeedbackRepo();
+                const creditList = await this.ocrRepo.getCreditsRepo();
+                const usersList = await configRepo.getUserListRepo();
+                const lookup = {
+                    docsList,
+                    contactList,
+                    feedbackList,
+                    creditList,
+                    usersList
+                };
                 if (lookup) {
                     resolve(lookup);
                 } else {
