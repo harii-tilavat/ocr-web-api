@@ -49,6 +49,18 @@ class ConfigRepo {
             }
         })
     }
+    getUserByIdRepo(user_id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const query = 'SELECT * FROM users WHERE id = ?';
+                const data = await mysql.execute(query, [user_id]);
+                const userList = data.map(item => new UserListModel(item));
+                resolve(userList);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
     updateTypeRepo(user_id, type, is_verified) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -64,8 +76,9 @@ class ConfigRepo {
         return new Promise(async (resolve, reject) => {
             try {
                 const query = 'SELECT * FROM users WHERE email = ?';
-                const lookup = await mysql.execute(query, [email]);
-                resolve(lookup);
+                const data = await mysql.execute(query, [email]);
+                const userList = data.map(item => new UserListModel(item));
+                resolve(userList);
             } catch (error) {
                 reject(error);
             }
@@ -93,11 +106,12 @@ class ConfigRepo {
             }
         })
     }
-    addOtpRepo(user_id, otp, expirationTime) {
+    addOtpRepo(user_id, otp,email, expirationTime) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'INSERT INTO otps (user_id, otp, expires_at) VALUES (?, ?, ?)';
-                await mysql.execute(query, [user_id, otp, expirationTime]);
+                const query = 'INSERT INTO otps (user_id, otp, email, expires_at) VALUES (?, ?, ?, ?)';
+                debugger;
+                await mysql.execute(query, [user_id, otp, email, expirationTime]);
                 resolve(true);
             } catch (error) {
                 reject(error);
@@ -107,7 +121,7 @@ class ConfigRepo {
     verifyOTPRepo(otp) {
         return new Promise(async (resolve, reject) => {
             try {
-                const query = 'SELECT user_id FROM otps WHERE otp = ? AND expires_at > NOW()'; //AND expires_at > NOW()
+                const query = 'SELECT user_id, email FROM otps WHERE otp = ? AND expires_at > NOW()'; //AND expires_at > NOW()
                 const data = await mysql.execute(query, [otp]);
                 resolve(data);
             } catch (error) {
