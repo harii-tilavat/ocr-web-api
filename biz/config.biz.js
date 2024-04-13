@@ -34,7 +34,8 @@ class ConfigBiz {
                     throw new BaseException('Provide all required fields please! ', 404);
                 }
                 const ocrRepo = new OCRRepo();
-                const ocrService = new OCRService();
+                const ocrService =
+                    new OCRService();
                 const id = uuidv4();
                 const password = md5(data.password);
                 const ref_code = ocrService.generateReferralCode();
@@ -159,7 +160,7 @@ class ConfigBiz {
                 }
                 const isOtpSent = await ocrService.sendOtp(users, otp);
                 if (isOtpSent) {
-                    const lookup = await this.configRepo.addOtpRepo(user_id, otp, expirationTime);
+                    const lookup = await this.configRepo.addOtpRepo(user_id, otp, email, expirationTime);
                     if (lookup) {
                         resolve(lookup);
                     }
@@ -177,12 +178,21 @@ class ConfigBiz {
                 if (!otp) {
                     throw new BaseException('Enter a valid OTP!');
                 }
+                const ocrService = new OCRService();
                 const lookup = await this.configRepo.verifyOTPRepo(otp);
                 if (lookup && lookup.length) {
-                    const { user_id } = lookup[0];
+                    const { user_id, email } = lookup[0];
                     const isVerified = await this.configRepo.verifyUser(user_id);
                     if (isVerified) {
                         await this.configRepo.removeOtp(user_id);
+                        const emailConfig = {
+                            subject: 'Registration successfully.',
+                            htmlContent: `
+                            <p> Your registration has been successfully! <p>
+                            <h4>Thank you from OCR team! <h4>
+                            `
+                        }
+                        await ocrService.sendEmail(email, emailConfig);
                         resolve(lookup[0]);
                     } else {
                         throw new BaseException('User not verified!');
@@ -207,15 +217,69 @@ class ConfigBiz {
             }
         })
     }
-    getUserByEmail(email) {
+    getUserByEmail(email, domain) {
         return new Promise(async (resolve, reject) => {
             try {
                 const lookup = await this.configRepo.getUserByEmailRepo(email);
                 if (lookup && lookup.length) {
-                    resolve(lookup);
+                    // const userList = lookup.map(item => new UserListModel(item));
+                    const token = await this.jwtTokenEncoded({email});
+                    const resetLink = `https://${domain}/reset-password?token=${token}`;
+                    const ocrService = new OCRService();
+                    const emailConfig = {
+                        subject: 'Reset password',
+                        htmlContent: `
+                        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                        <h2>Password Reset</h2>
+                        <p>Hello,</p>
+                        <p>You have requested to reset your password. Please click the button below to reset your password.</p>
+                        <p style="text-align: center;">
+                          <a href="${resetLink}" style="display: inline-block; background-color: #007bff; color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 5px;">Reset Password</a>
+                        </p>
+                        <p>If you did not request this, please ignore this email. Your password will remain unchanged.</p>
+                        <p>Thank you!</p>
+                      </div>
+                        `
+                    }
+                    const sentEmail = ocrService.sendEmail(email, emailConfig);
+                    if (sentEmail) {
+                        resolve(resetLink);
+                    } else {
+                        throw new BaseException();
+                    }
                 } else {
                     throw new BaseException('Email is not registered with us!', 404);
                 }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    verifyJWTToken(token){
+        return new Promise((resolve,reject)=>{
+            try {
+                const jwtSecret = fs.readFileSync(path.resolve('./jwtRSA256.key'), { encoding: 'utf-8' });
+                jwt.verify(token, jwtSecret, (err, decoded) => {
+                    if (err) {
+                       reject(err);
+                    }
+                    console.log(decoded);
+                    resolve(decoded);
+                });
+
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+    resetPassoword(userInfo) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { token, newPassword } = userInfo;
+                const ocrService = new OCRService();
+                const verifiedToken = await this.verifyJWTToken(token);
+        
+                resolve(verifiedToken);
             } catch (error) {
                 reject(error);
             }

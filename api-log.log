@@ -10522,9 +10522,3 @@
 [6/4/2024, 8:55:43 pm] GET /api/credits?user_id=66813be7-2757-41ab-9b16-a7f987d7e664 
 [6/4/2024, 8:56:10 pm] GET /api/credits?user_id=66813be7-2757-41ab-9b16-a7f987d7e664 
 [6/4/2024, 8:56:15 pm] GET /api/credits?user_id=66813be7-2757-41ab-9b16-a7f987d7e664 
-[6/4/2024, 9:09:38 pm] GET /api/docs?user_id=66813be7-2757-41ab-9b16-a7f987d7e664&isArchivedList=false 
-[6/4/2024, 9:09:42 pm] GET /api/docs/b5542f64-fabc-472a-9454-ac2581f27d62?user_id=66813be7-2757-41ab-9b16-a7f987d7e664 
-[6/4/2024, 9:09:48 pm] POST /download 
-[6/4/2024, 9:09:55 pm] GET /api/credits?user_id=66813be7-2757-41ab-9b16-a7f987d7e664 
-[6/4/2024, 9:10:07 pm] GET /api/referal?user_id=66813be7-2757-41ab-9b16-a7f987d7e664 
-[6/4/2024, 9:10:22 pm] POST /change-password 

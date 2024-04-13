@@ -144,7 +144,7 @@ class ConfigController {
                 try {
                     const configBiz = new ConfigBiz();
                     const data = await configBiz.changePassword(req.body);
-                    
+
                     res.json({ data, message: 'Your password has been changed!' });
                 } catch (error) {
                     next(error);
@@ -156,29 +156,27 @@ class ConfigController {
                 try {
                     const { email } = req.body;
                     const configBiz = new ConfigBiz();
-                    const data = await configBiz.getUserByEmail(email);
+                    // const domain = req.headers.host;
+                    const domain = 'localhost:4200';
+                    const data = await configBiz.getUserByEmail(email, domain);
                     res.json({ message: `We have sent you reset password email at the ${email}`, data });
                 } catch (error) {
                     next(error);
                 }
             })
-        // app.post('/reset-password', (req, res) => {
-        //     const { token, newPassword } = req.body;
+        app.route('/reset-password')
+            .post(async (req, res, next) => {
+                try {
+                    const configBiz = new ConfigBiz();
+                    const data = await configBiz.resetPassoword(req.body);
+                    res.json({ message: `Password changed`, data });
+                } catch (error) {
+                    next(error);
+                }
 
-        //     // Verify token
-        //     jwt.verify(token, jwtSecret, (err, decoded) => {
-        //         if (err) {
-        //             return res.status(401).send('Invalid or expired token');
-        //         }
+                // Verify token
 
-        //         const { email } = decoded;
-
-        //         // Update password in database (replace with your database logic)
-        //         users[email].password = bcrypt.hashSync(newPassword, 10);
-
-        //         res.status(200).send('Password reset successfully');
-        //     });
-        // });
+            });
 
     }
 }
